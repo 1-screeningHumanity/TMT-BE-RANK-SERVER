@@ -20,7 +20,7 @@ spring:
     port: ${REDIS_PORT}
 
 server:
-  port: 0
+  port: 8084
 
 eureka:
   instance:
