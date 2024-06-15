@@ -28,6 +28,9 @@ public enum BaseResponseCode {
     TEST_ERROR(HttpStatus.BAD_REQUEST, false, 1234, "Test용 Error Message 입니다"),
     //
 
+    //Ranking
+    WRONG_URL(HttpStatus.BAD_REQUEST, false, 1001, " 잘못된 경로 지정"),
+
     //공통 에러. 9000 ~ 9999
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 9000, "서버 에러"),
     VALIDATION_FAIL_ERROR(HttpStatus.BAD_REQUEST, false, 9100, "(exception error 메세지에 따름)"),
