@@ -34,7 +34,7 @@ public class DailyWalletServiceImp implements DailyWalletService {
         saveDailyWallet(response);
     }
 
-    @Override
+    @Override //지갑데이터 저장
     public void saveDailyWallet(DailyWalletInfoResponseDto dailyWalletInfoResponseDto) {
 
         for (DailyWalletInfoResponseDto.DataDto data : dailyWalletInfoResponseDto.getData()) {

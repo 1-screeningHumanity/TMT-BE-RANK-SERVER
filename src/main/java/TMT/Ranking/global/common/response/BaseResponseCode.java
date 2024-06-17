@@ -31,6 +31,7 @@ public enum BaseResponseCode {
     //Ranking
     WRONG_URL(HttpStatus.BAD_REQUEST, false, 1001, " 잘못된 경로 지정"),
     EMPTY_YESTERDAYWALLET(HttpStatus.BAD_REQUEST, false, 1002, "어제 지갑정보가 존재하지않습니다."),
+    NOY_YET(HttpStatus.BAD_REQUEST, false, 1003, "시간을 감지할수 없습니다."),
 
     //공통 에러. 9000 ~ 9999
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 9000, "서버 에러"),

@@ -1,6 +1,9 @@
 spring:
   application:
     name: TMT_Rank_server
+  batch:
+    jdbc:
+      initialize-schema: always
 
   datasource:
     url: ${RANKING_DB}

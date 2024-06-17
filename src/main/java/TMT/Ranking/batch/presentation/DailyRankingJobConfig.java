@@ -22,6 +22,7 @@ import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Slf4j
@@ -36,26 +37,34 @@ public class DailyRankingJobConfig {
 
 
     @Bean
-    public Job dailyRankingJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public Job dailyRankingJob(JobRepository jobRepository,
+            PlatformTransactionManager transactionManager) {
+
         return new JobBuilder("DailyRankingJob", jobRepository)
                 .start(dailyRankingStep(jobRepository, transactionManager))
                 .next(dailyRankingNextStep(jobRepository, transactionManager))
                 .build();
+
     }
 
     @Bean
-    public Step dailyRankingStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public Step dailyRankingStep(JobRepository jobRepository,
+            PlatformTransactionManager transactionManager) {
+
         return new StepBuilder("DailyRankingStep", jobRepository)
-                .<DailyWallet, DailyWallet>chunk(10, transactionManager)
+                .<DailyWallet, DailyRanking>chunk(10, transactionManager)
                 .reader(walletItemReader())
                 .writer(walletItemWriter())
                 .build();
+
     }
 
     @Bean
-    public Step dailyRankingNextStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public Step dailyRankingNextStep(JobRepository jobRepository,
+            PlatformTransactionManager transactionManager) {
+
         return new StepBuilder("DailyRankingNextStep", jobRepository)
-                .<DailyWallet, DailyWallet>chunk(10,  transactionManager)
+                .<DailyWallet, DailyRanking>chunk(10,  transactionManager)
                 .reader(walletItemReader())
                 .processor(walletItemprocessor())
                 .writer(walletItemWriter())
@@ -73,16 +82,15 @@ public class DailyRankingJobConfig {
                 .sorts(Collections.singletonMap("uuid", Sort.Direction.ASC))
                 .build();
     }
-
     @Bean //오늘 지갑정보 log 출력용 ItemWriter
-    public ItemWriter<DailyWallet> walletItemWriter(){
+    public ItemWriter<? super DailyRanking> walletItemWriter(){
         return items -> items.forEach(item ->{
             log.info("{}", item);
         });
     }
 
     @Bean
-    public ItemProcessor<DailyWallet, DailyRanking> walletItemprocessor(){
+    public ItemProcessor<? super DailyWallet, ? extends DailyRanking> walletItemprocessor(){
         return dailyRankingServiceImp::createprofit; //서비스로직 추가
     }
 

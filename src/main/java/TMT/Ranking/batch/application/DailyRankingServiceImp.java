@@ -1,7 +1,6 @@
 package TMT.Ranking.batch.application;
 
 import TMT.Ranking.batch.domain.DailyRanking;
-import TMT.Ranking.batch.infrastructure.DailyRankingRepository;
 import TMT.Ranking.daliywallet.domain.DailyWallet;
 import TMT.Ranking.daliywallet.infrastructure.DailyWalletInfoRepository;
 import TMT.Ranking.global.common.exception.CustomException;
@@ -15,9 +14,6 @@ import org.springframework.stereotype.Service;
 public class DailyRankingServiceImp implements DailyRankingService {
 
     private final DailyWalletInfoRepository dailyWalletInfoRepository;
-
-    private final DailyRankingRepository dailyRankingRepository;
-
 
     @Override
     public DailyRanking createprofit(DailyWallet dailyWallet){
