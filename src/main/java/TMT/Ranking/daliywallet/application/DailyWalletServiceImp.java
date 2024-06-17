@@ -38,8 +38,13 @@ public class DailyWalletServiceImp implements DailyWalletService {
     public void saveDailyWallet(DailyWalletInfoResponseDto dailyWalletInfoResponseDto) {
 
         for (DailyWalletInfoResponseDto.DataDto data : dailyWalletInfoResponseDto.getData()) {
-            DailyWallet dailyWallet = new DailyWallet(data.getUuid(), data.getWon());
+
+            String uuid = data.getUuid();
+            if (uuid.startsWith("\"") && uuid.endsWith("\"")) {
+                uuid = uuid.substring(1, uuid.length() - 1);
+            }DailyWallet dailyWallet = new DailyWallet(uuid, data.getWon());
             dailyWalletInfoRepository.save(dailyWallet);
+
         }
     }
 }
