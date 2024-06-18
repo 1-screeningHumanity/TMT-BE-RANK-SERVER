@@ -14,11 +14,6 @@ public class DailyWalletInfoResponseDto {
         private String uuid;
         private Long won;
 
-        @Builder
-        public DataDto(String uuid, Long won) {
-            this.uuid = uuid;
-            this.won = won;
-        }
     }
 
 }

@@ -26,12 +26,22 @@ public class QDailyWallet extends EntityPathBase<DailyWallet> {
 
     public final NumberPath<Long> dailyWalletId = createNumber("dailyWalletId", Long.class);
 
+    public final NumberPath<Long> fridayWon = createNumber("fridayWon", Long.class);
+
+    public final NumberPath<Long> lastMondayWon = createNumber("lastMondayWon", Long.class);
+
+    public final NumberPath<Long> lastMonthEndWon = createNumber("lastMonthEndWon", Long.class);
+
+    public final NumberPath<Long> lastMonthWon = createNumber("lastMonthWon", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
+    public final NumberPath<Long> todayWon = createNumber("todayWon", Long.class);
+
     public final StringPath uuid = createString("uuid");
 
-    public final NumberPath<Long> won = createNumber("won", Long.class);
+    public final NumberPath<Long> yesterdayWon = createNumber("yesterdayWon", Long.class);
 
     public QDailyWallet(String variable) {
         super(DailyWallet.class, forVariable(variable));
