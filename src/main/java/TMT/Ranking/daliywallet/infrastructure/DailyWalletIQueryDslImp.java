@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class DailyWalletInfoQueryDslImp implements DailyWalletInfoQueryDslRepository {
+public class DailyWalletIQueryDslImp implements DailyWalletQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -27,7 +27,6 @@ public class DailyWalletInfoQueryDslImp implements DailyWalletInfoQueryDslReposi
                 .execute();
 
     }
-
 
     @Override
     @Transactional
@@ -70,5 +69,13 @@ public class DailyWalletInfoQueryDslImp implements DailyWalletInfoQueryDslReposi
                 .execute();
 
         log.info("lastMonthEndWon update");
+    }
+
+    @Override
+    @Transactional //todayWon->yesterdayWon
+    public void updateYesterdayWon(){
+        jpaQueryFactory.update(dailyWallet)
+                .set(dailyWallet.yesterdayWon, dailyWallet.todayWon)
+                .execute();
     }
 }

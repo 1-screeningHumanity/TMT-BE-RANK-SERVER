@@ -2,7 +2,7 @@ package TMT.Ranking.daliywallet.infrastructure;
 
 import org.springframework.transaction.annotation.Transactional;
 
-public interface DailyWalletInfoQueryDslRepository {
+public interface DailyWalletQueryDslRepository {
 
 
     void updateTodayWon(String uuid, Long won);
@@ -16,4 +16,7 @@ public interface DailyWalletInfoQueryDslRepository {
 
 
     void updateLastMonthEndWon();
+
+    @Transactional
+    void updateYesterdayWon();
 }

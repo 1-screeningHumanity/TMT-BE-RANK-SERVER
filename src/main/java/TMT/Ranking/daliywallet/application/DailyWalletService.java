@@ -8,6 +8,9 @@ public interface DailyWalletService {
 
     void saveDailyWallet(DailyWalletInfoResponseDto dailyWalletInfoResponseDto);
 
+    @Scheduled
+    void updateYesterdayWon();
+
     void updateMondayWon();
     void updateFridayWon();
     void updateLastMonthWon();

@@ -1,8 +1,8 @@
 package TMT.Ranking.daliywallet.application;
 import TMT.Ranking.daliywallet.domain.DailyWallet;
 import TMT.Ranking.daliywallet.dto.DailyWalletInfoResponseDto;
-import TMT.Ranking.daliywallet.infrastructure.DailyWalletInfoQueryDslImp;
-import TMT.Ranking.daliywallet.infrastructure.DailyWalletInfoRepository;
+import TMT.Ranking.daliywallet.infrastructure.DailyWalletIQueryDslImp;
+import TMT.Ranking.daliywallet.infrastructure.DailyWalletRepository;
 import TMT.Ranking.global.common.exception.CustomException;
 import TMT.Ranking.global.common.response.BaseResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 public class DailyWalletServiceImp implements DailyWalletService {
 
     private final RecivedMessage recivedMessage;
-    private final DailyWalletInfoRepository dailyWalletInfoRepository;
-    private final DailyWalletInfoQueryDslImp dailyWalletInfoQueryDslImp;
+    private final DailyWalletRepository dailyWalletInfoRepository;
+    private final DailyWalletIQueryDslImp dailyWalletInfoQueryDslImp;
 
 
     @Override
@@ -56,29 +56,40 @@ public class DailyWalletServiceImp implements DailyWalletService {
             }
         }
     }
+    @Override
+    @Scheduled(cron = "0 10 17 ? * MON-FRI")
+    public void updateYesterdayWon(){
+        dailyWalletInfoQueryDslImp.updateYesterdayWon();
+    }
 
     @Override
-    @Scheduled(cron = "0 10 16 ? * MON")
+    @Scheduled(cron = "0 20 16 ? * MON") //매주 월요일
     public void updateMondayWon(){
         dailyWalletInfoQueryDslImp.updateMondayWon();
+        log.info("lastMondayWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 10 16 ? * FRI")
+    @Scheduled(cron = "0 20 16 ? * FRI") //매주 금요일
     public void updateFridayWon(){
+
         dailyWalletInfoQueryDslImp.updateMondayWon();
+        log.info("fridayWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 10 16 1 * *")
+    @Scheduled(cron = "0 40 16 1 * *") //매월 1일
     public void updateLastMonthWon(){
         dailyWalletInfoQueryDslImp.updateLastMonthWon();
+        log.info("lastMonthWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 10 16 L * *")
+    @Scheduled(cron = "0 40 16 L * *")  //매월 말일
     public void updateLastMonthEndWon(){
+
         dailyWalletInfoQueryDslImp.updateLastMonthEndWon();
+        log.info("lastMonthEndWon update");
     }
 
 }
