@@ -1,6 +1,9 @@
 spring:
   application:
     name: TMT_Rank_server
+  batch:
+    jdbc:
+      initialize-schema: always
 
   datasource:
     url: ${RANKING_DB}
@@ -20,7 +23,7 @@ spring:
     port: ${REDIS_PORT}
 
 server:
-  port: 8084
+  port: 0
 
 eureka:
   instance:
@@ -63,3 +66,6 @@ JWT:
 
 kafka:
   bootstrap-server: ${KAFKA_SERVER}
+
+FEIGNCLIENT:
+  URL: ${PAYMENT_FEIGN_URL}
