@@ -12,6 +12,7 @@ public class DailyWalletInfoResponseDto {
 
         private String uuid;
         private Long won;
+        private String nickname;
 
     }
 

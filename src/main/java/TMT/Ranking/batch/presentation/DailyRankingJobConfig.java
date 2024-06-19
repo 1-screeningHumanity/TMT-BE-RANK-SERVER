@@ -5,13 +5,14 @@ import TMT.Ranking.batch.dto.DailyRankingDto;
 import TMT.Ranking.batch.infrastructure.DailyRankingQueryDslmp;
 import TMT.Ranking.batch.infrastructure.DailyRankingRepository;
 import TMT.Ranking.daliywallet.domain.DailyWallet;
-import TMT.Ranking.daliywallet.infrastructure.DailyWalletIQueryDslImp;
 import TMT.Ranking.daliywallet.infrastructure.DailyWalletRepository;
 import TMT.Ranking.global.common.exception.CustomException;
 import TMT.Ranking.global.common.response.BaseResponseCode;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -91,6 +92,7 @@ public class DailyRankingJobConfig {
                     .uuid(dailyWallet.getUuid())
                     .todayWon(dailyWallet.getTodayWon())
                     .profit(roundedProfit.doubleValue())
+                    .nickname(dailyWallet.getNickname())
                     .build();
         };
     }
@@ -98,19 +100,26 @@ public class DailyRankingJobConfig {
     @Bean
     public ItemWriter<DailyRankingDto> dailyRankingWriter() {
         return items -> {
+
+            //chunk의 타입이 List<?extends> 이기때문
+            List<? extends DailyRankingDto> itemList = items.getItems();
+            itemList.sort(Comparator.comparing(DailyRankingDto::getProfit).reversed());
+            Long rank = 0L;
+
             for (DailyRankingDto item : items) {
+
                 if(dailyRankingRepository.existsByUuid(item.getUuid())){
                     dailyRankingQueryDslmp.updateDailyRanking(
                             item.getUuid(),
                             item.getTodayWon(),
-                            item.getProfit());
-
+                            item.getProfit(),
+                            item.getRanking(),
+                            item.getNickname());
                 }else {
                     DailyRanking dailyRanking = DailyRanking.builder()
                         .uuid(item.getUuid())
                         .won(item.getTodayWon())
-                        .profit(item.getProfit())
-                        .build();
+                        .profit(item.getProfit()).nickname(item.getNickname()).build();
                         dailyRankingRepository.save(dailyRanking);
                 }
             }
