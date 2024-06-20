@@ -4,6 +4,7 @@ import static TMT.Ranking.batch.domain.QDailyRanking.dailyRanking;
 
 import TMT.Ranking.batch.domain.DailyRanking;
 import TMT.Ranking.kafka.dto.NicknameChangeDto;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Transactional
-    @Override
+    @Override //수익률 정산
     public void updateDailyRanking(String uuid, Long won,
             double profit, String nickname)
     {
@@ -30,7 +31,7 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
     }
 
     @Transactional
-    @Override
+    @Override //닉네임 변경
     public void updateNickname(NicknameChangeDto nicknameChangeDto){
 
         jpaQueryFactory.update(dailyRanking)
@@ -73,7 +74,7 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
     }
 
     @Override
-    @Transactional
+    @Transactional //어제 등수 업데이트
     public void updateYesterdayRanking(){
 
         jpaQueryFactory
@@ -83,7 +84,7 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
     }
 
     @Override
-    @Transactional
+    @Transactional //등수 변동 업데이트
     public void updateChangeRanking(){
 
         jpaQueryFactory
@@ -91,6 +92,18 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
                 .set(dailyRanking.changeRanking,
                         dailyRanking.yesterdayRanking.subtract(dailyRanking.todayranking))
                 .execute();
+    }
+
+    @Override //RankingList
+    public List<Tuple> getRanking(){
+
+        return jpaQueryFactory
+                .select(dailyRanking.profit, dailyRanking.nickname,
+                        dailyRanking.todayranking, dailyRanking.changeRanking)
+                .from(dailyRanking)
+                .orderBy(dailyRanking.profit.desc())
+                .fetch();
+
     }
 
 }
