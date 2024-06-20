@@ -98,7 +98,7 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
     public List<Tuple> getRanking(){
 
         return jpaQueryFactory
-                .select(dailyRanking.profit, dailyRanking.nickname,
+                .select(dailyRanking.profit, dailyRanking.nickname, dailyRanking.won,
                         dailyRanking.todayranking, dailyRanking.changeRanking)
                 .from(dailyRanking)
                 .orderBy(dailyRanking.profit.desc())

@@ -2,14 +2,20 @@ package TMT.Ranking.batch.application;
 
 import static TMT.Ranking.batch.domain.QDailyRanking.dailyRanking;
 
+import TMT.Ranking.batch.domain.DailyRanking;
 import TMT.Ranking.batch.infrastructure.DailyRankingQueryDslmp;
 import TMT.Ranking.batch.infrastructure.DailyRankingRepository;
+import TMT.Ranking.batch.vo.MyProfitResponseVo;
 import TMT.Ranking.batch.vo.ProfitListResponseVo;
-import TMT.Ranking.daliywallet.infrastructure.DailyWalletRepository;
+import TMT.Ranking.global.common.exception.CustomException;
+import TMT.Ranking.global.common.response.BaseResponseCode;
 import com.querydsl.core.Tuple;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +24,7 @@ import org.springframework.stereotype.Service;
 public class DailyRankingServiceImp implements DailyRankingService {
 
     private final DailyRankingQueryDslmp dailyRankingQueryDslmp;
+    private final DailyRankingRepository dailyRankingRepository;
 
     @Override
     @Scheduled(cron = "0 40 16 ? * MON-FRI")
@@ -48,20 +55,29 @@ public class DailyRankingServiceImp implements DailyRankingService {
 
     }
 
-    @Override  //일일 랭킹 return 
+    @Override  //일일 랭킹 return
     public List<ProfitListResponseVo> getProfit(){
 
         List<Tuple> tuples = dailyRankingQueryDslmp.getRanking();
         List<ProfitListResponseVo> profitListResponseVo = tuples.stream()
                 .map(this::maptoDto).toList();
 
+
         return profitListResponseVo;
 
     }
 
+    @Override
+    public MyProfitResponseVo getMyProfit(String uuid){
 
+        Optional<DailyRanking> dailyRanking = dailyRankingRepository.findByUuid(uuid);
+        if(dailyRanking.isEmpty()) {
+            throw new CustomException(BaseResponseCode.INCORRECT_UUID);
 
+        }
 
-
+        return new MyProfitResponseVo(dailyRanking.get().getNickname(),
+                dailyRanking.get().getTodayranking());
+    }
 
 }
