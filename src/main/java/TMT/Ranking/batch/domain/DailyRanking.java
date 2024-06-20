@@ -25,11 +25,19 @@ public class DailyRanking extends BaseEntity {
     private Long won;
 
     private double profit;
+
+    private Long ranking;
+
+    private String nickname;
+
     @Builder
-    public DailyRanking(Long dailyRankingId, String uuid, Long won, double profit) {
+    public DailyRanking(Long dailyRankingId, String uuid, Long won, double profit,
+            Long ranking, String nickname) {
         this.dailyRankingId = dailyRankingId;
         this.uuid = uuid;
         this.won = won;
         this.profit = profit;
+        this.ranking = ranking;
+        this.nickname = nickname;
     }
 }

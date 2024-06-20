@@ -29,7 +29,11 @@ public class QDailyRanking extends EntityPathBase<DailyRanking> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
+    public final StringPath nickname = createString("nickname");
+
     public final NumberPath<Double> profit = createNumber("profit", Double.class);
+
+    public final NumberPath<Long> ranking = createNumber("ranking", Long.class);
 
     public final StringPath uuid = createString("uuid");
 

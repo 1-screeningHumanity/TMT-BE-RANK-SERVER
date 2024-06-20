@@ -37,6 +37,8 @@ public class QDailyWallet extends EntityPathBase<DailyWallet> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
+    public final StringPath nickname = createString("nickname");
+
     public final NumberPath<Long> todayWon = createNumber("todayWon", Long.class);
 
     public final StringPath uuid = createString("uuid");

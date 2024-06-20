@@ -45,12 +45,13 @@ public class DailyWalletServiceImp implements DailyWalletService {
 
             if (dailyWalletInfoRepository.existsByUuid(uuid)){
 
-                dailyWalletInfoQueryDslImp.updateTodayWon(uuid, data.getWon());
+                dailyWalletInfoQueryDslImp.updateTodayWon(uuid, data.getWon(), data.getNickname());
 
             }else {
                 DailyWallet dailyWalletinfo = DailyWallet.builder()
                         .uuid(uuid)
                         .todayWon(data.getWon())
+                        .nickname(data.getNickname())
                         .build();
                 dailyWalletInfoRepository.save(dailyWalletinfo);
             }

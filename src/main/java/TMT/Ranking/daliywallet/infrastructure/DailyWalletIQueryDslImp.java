@@ -1,6 +1,7 @@
 package TMT.Ranking.daliywallet.infrastructure;
 
 
+import TMT.Ranking.kafka.dto.NicknameChangeDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import static TMT.Ranking.daliywallet.domain.QDailyWallet.dailyWallet;
 
@@ -19,10 +20,11 @@ public class DailyWalletIQueryDslImp implements DailyWalletQueryDslRepository {
 
     @Override
     @Transactional
-    public void updateTodayWon(String uuid, Long won){
+    public void updateTodayWon(String uuid, Long won, String nickname){
 
         jpaQueryFactory.update(dailyWallet)
                 .set(dailyWallet.todayWon, won)
+                .set(dailyWallet.nickname,nickname)
                 .where(dailyWallet.uuid.eq(uuid))
                 .execute();
 
@@ -77,5 +79,16 @@ public class DailyWalletIQueryDslImp implements DailyWalletQueryDslRepository {
         jpaQueryFactory.update(dailyWallet)
                 .set(dailyWallet.yesterdayWon, dailyWallet.todayWon)
                 .execute();
+    }
+
+    @Override
+    @Transactional
+    public void updateNickname(NicknameChangeDto nicknameChangeDto){
+
+        jpaQueryFactory.update(dailyWallet)
+                .set(dailyWallet.nickname, nicknameChangeDto.getAfterNickName())
+                .where(dailyWallet.nickname.eq(nicknameChangeDto.getBeforeNickName()))
+                .execute();
+
     }
 }

@@ -26,11 +26,12 @@ public class DailyWallet extends BaseEntity {
     private Long fridayWon; //금요일 자산
     private Long lastMonthWon; //지난달 첫날 자산
     private Long lastMonthEndWon; //지난달 마지막날 자산
+    private String nickname;
 
 
     @Builder
     public DailyWallet(Long dailyWalletId, String uuid, Long yesterdayWon, Long todayWon,
-            Long lastMondayWon, Long fridayWon, Long lastMonthWon, Long lastMonthEndWon) {
+            Long lastMondayWon, Long fridayWon, Long lastMonthWon, Long lastMonthEndWon, String nickname) {
         this.dailyWalletId = dailyWalletId;
         this.uuid = uuid;
         this.yesterdayWon = yesterdayWon;
@@ -39,5 +40,6 @@ public class DailyWallet extends BaseEntity {
         this.fridayWon = fridayWon;
         this.lastMonthWon = lastMonthWon;
         this.lastMonthEndWon = lastMonthEndWon;
+        this.nickname = nickname;
     }
 }

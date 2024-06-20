@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DailyWalletRepository extends JpaRepository<DailyWallet, Long> {
     boolean existsByUuid(String uuid);
+
     List<DailyWallet> findAll();
+
 
 }
