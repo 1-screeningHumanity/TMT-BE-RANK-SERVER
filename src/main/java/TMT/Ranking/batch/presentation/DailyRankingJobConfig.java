@@ -107,7 +107,6 @@ public class DailyRankingJobConfig {
                             item.getUuid(),
                             item.getTodayWon(),
                             item.getProfit(),
-                            item.getRanking(),
                             item.getNickname());
                 }else {
                     DailyRanking dailyRanking = DailyRanking.builder()
