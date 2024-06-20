@@ -8,6 +8,5 @@ public interface DailyRankingQueryDsl {
     void updateDailyRanking(String uuid, Long won,
             double profit, Long ranking, String nickname);
 
-    @Transactional
     void updateNickname(NicknameChangeDto nicknameChangeDto);
 }
