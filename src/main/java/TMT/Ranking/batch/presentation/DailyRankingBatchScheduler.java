@@ -18,7 +18,7 @@ public class DailyRankingBatchScheduler {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
 
-    @Scheduled(cron = "0 10 17 ? * MON-FRI")
+    @Scheduled(cron = "0 40 16 ? * MON-FRI")
     public void dailyRankingBatchStart()
             throws Exception{
 

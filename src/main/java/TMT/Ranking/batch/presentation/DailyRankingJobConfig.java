@@ -100,12 +100,6 @@ public class DailyRankingJobConfig {
     @Bean
     public ItemWriter<DailyRankingDto> dailyRankingWriter() {
         return items -> {
-
-            //chunk의 타입이 List<?extends> 이기때문
-            List<? extends DailyRankingDto> itemList = items.getItems();
-            itemList.sort(Comparator.comparing(DailyRankingDto::getProfit).reversed());
-            Long rank = 0L;
-
             for (DailyRankingDto item : items) {
 
                 if(dailyRankingRepository.existsByUuid(item.getUuid())){
@@ -113,7 +107,6 @@ public class DailyRankingJobConfig {
                             item.getUuid(),
                             item.getTodayWon(),
                             item.getProfit(),
-                            item.getRanking(),
                             item.getNickname());
                 }else {
                     DailyRanking dailyRanking = DailyRanking.builder()

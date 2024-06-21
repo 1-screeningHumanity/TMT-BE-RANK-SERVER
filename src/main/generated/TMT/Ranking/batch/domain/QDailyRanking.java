@@ -21,6 +21,8 @@ public class QDailyRanking extends EntityPathBase<DailyRanking> {
 
     public final TMT.Ranking.global.entity.QBaseEntity _super = new TMT.Ranking.global.entity.QBaseEntity(this);
 
+    public final NumberPath<Long> changeRanking = createNumber("changeRanking", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -33,11 +35,13 @@ public class QDailyRanking extends EntityPathBase<DailyRanking> {
 
     public final NumberPath<Double> profit = createNumber("profit", Double.class);
 
-    public final NumberPath<Long> ranking = createNumber("ranking", Long.class);
+    public final NumberPath<Long> todayranking = createNumber("todayranking", Long.class);
 
     public final StringPath uuid = createString("uuid");
 
     public final NumberPath<Long> won = createNumber("won", Long.class);
+
+    public final NumberPath<Long> yesterdayRanking = createNumber("yesterdayRanking", Long.class);
 
     public QDailyRanking(String variable) {
         super(DailyRanking.class, forVariable(variable));

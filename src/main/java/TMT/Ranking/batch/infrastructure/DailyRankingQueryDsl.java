@@ -1,12 +1,21 @@
 package TMT.Ranking.batch.infrastructure;
 
 import TMT.Ranking.kafka.dto.NicknameChangeDto;
-import org.springframework.transaction.annotation.Transactional;
+import com.querydsl.core.Tuple;
+import java.util.List;
+
 
 public interface DailyRankingQueryDsl {
-
     void updateDailyRanking(String uuid, Long won,
-            double profit, Long ranking, String nickname);
-
+            double profit, String nickname);
     void updateNickname(NicknameChangeDto nicknameChangeDto);
+
+    void updateDailyRank();
+
+    void updateYesterdayRanking();
+
+    void updateChangeRanking();
+
+    List<Tuple> getRanking();
+
 }

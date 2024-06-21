@@ -22,7 +22,7 @@ public class DailyWalletServiceImp implements DailyWalletService {
 
 
     @Override
-    @Scheduled(cron = "0 10 16 ? * MON-FRI") //오후 4시 10분에 실행
+    @Scheduled(cron = "0 0 16 ? * MON-FRI") //오후 4시 에 실행
     public void walletInfoRequest() {
 
         // Feign 클라이언트를 통해, walletinfo 받아옴
@@ -39,10 +39,7 @@ public class DailyWalletServiceImp implements DailyWalletService {
     public void saveDailyWallet(DailyWalletInfoResponseDto dailyWalletInfoResponseDto) {
 
         for (DailyWalletInfoResponseDto.DataDto data : dailyWalletInfoResponseDto.getData()) {
-
-                String uuid = data.getUuid();
-                uuid = uuid.substring(1, uuid.length() - 1);
-
+            String uuid = data.getUuid();
             if (dailyWalletInfoRepository.existsByUuid(uuid)){
 
                 dailyWalletInfoQueryDslImp.updateTodayWon(uuid, data.getWon(), data.getNickname());
@@ -58,8 +55,9 @@ public class DailyWalletServiceImp implements DailyWalletService {
         }
     }
     @Override
-    @Scheduled(cron = "0 10 17 ? * MON-FRI")
+    @Scheduled(cron = "0 10 16 ? * MON-FRI")
     public void updateYesterdayWon(){
+
         dailyWalletInfoQueryDslImp.updateYesterdayWon();
     }
 
@@ -79,14 +77,14 @@ public class DailyWalletServiceImp implements DailyWalletService {
     }
 
     @Override
-    @Scheduled(cron = "0 40 16 1 * *") //매월 1일
+    @Scheduled(cron = "0 30 16 1 * *") //매월 1일
     public void updateLastMonthWon(){
         dailyWalletInfoQueryDslImp.updateLastMonthWon();
         log.info("lastMonthWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 40 16 L * *")  //매월 말일
+    @Scheduled(cron = "0 30 16 L * *")  //매월 말일
     public void updateLastMonthEndWon(){
 
         dailyWalletInfoQueryDslImp.updateLastMonthEndWon();
