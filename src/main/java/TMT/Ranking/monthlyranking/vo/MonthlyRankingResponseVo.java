@@ -1,15 +1,16 @@
-package TMT.Ranking.batch.vo;
+package TMT.Ranking.monthlyranking.vo;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ProfitListResponseVo {
+public class MonthlyRankingResponseVo {
 
     private double profit;
     private String nickname;
-    private Long todayRanking;
+    private Long ranking;
     private Long changeRanking;
 
 }

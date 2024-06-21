@@ -3,6 +3,7 @@ package TMT.Ranking.weeklyranking.presentation;
 
 import TMT.Ranking.global.common.response.BaseResponse;
 import TMT.Ranking.global.common.token.DecodingToken;
+import TMT.Ranking.monthlyranking.vo.MonthlyMyRankingResponseVo;
 import TMT.Ranking.weeklyranking.application.WeeklyRankingServiceImp;
 import TMT.Ranking.weeklyranking.vo.WeeklyMyRankingResponseVo;
 import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
@@ -39,4 +40,5 @@ public class WeeklyRankingController {
         return new BaseResponse<>(weeklyMyRankingResponseVo);
 
     }
+
 }

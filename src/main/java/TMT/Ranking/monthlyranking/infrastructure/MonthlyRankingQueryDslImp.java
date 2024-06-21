@@ -4,6 +4,7 @@ import static TMT.Ranking.monthlyranking.domain.QMonthlyRanking.monthlyRanking;
 
 import TMT.Ranking.monthlyranking.domain.MonthlyRanking;
 import TMT.Ranking.monthlyranking.dto.MonthlyRankingDto;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -80,6 +81,17 @@ public class MonthlyRankingQueryDslImp implements MonthlyRankingQueryDsl{
                 .update(monthlyRanking)
                 .set(monthlyRanking.lastMonthRanking, monthlyRanking.ranking)
                 .execute();
+    }
+
+    @Override
+    public List<Tuple> getMonthlyRanking(){
+
+        return jpaQueryFactory
+                .select(monthlyRanking.ranking,monthlyRanking.nickname,
+                        monthlyRanking.profit,monthlyRanking.changeRanking)
+                .from(monthlyRanking)
+                .orderBy(monthlyRanking.profit.desc())
+                .fetch();
     }
 
 }

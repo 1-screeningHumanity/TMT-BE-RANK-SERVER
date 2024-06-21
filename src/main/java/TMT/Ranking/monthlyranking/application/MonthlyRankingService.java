@@ -1,5 +1,9 @@
 package TMT.Ranking.monthlyranking.application;
 
+import TMT.Ranking.monthlyranking.vo.MonthlyMyRankingResponseVo;
+import TMT.Ranking.monthlyranking.vo.MonthlyRankingResponseVo;
+import java.util.List;
+
 public interface MonthlyRankingService {
 
     void updateMonthlyRanking();
@@ -7,4 +11,8 @@ public interface MonthlyRankingService {
     void updateMonthlyRankingChange();
 
     void updateLastMonthRanking();
+
+    List<MonthlyRankingResponseVo> getMonthlyRanking();
+
+    MonthlyMyRankingResponseVo getMyMonthlyRanking(String uuid);
 }

@@ -1,6 +1,8 @@
 package TMT.Ranking.monthlyranking.infrastructure;
 
 import TMT.Ranking.monthlyranking.dto.MonthlyRankingDto;
+import com.querydsl.core.Tuple;
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface MonthlyRankingQueryDsl {
@@ -13,4 +15,6 @@ public interface MonthlyRankingQueryDsl {
 
     @Transactional
     void updateLastMonthRanking();
+
+    List<Tuple> getMonthlyRanking();
 }

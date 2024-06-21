@@ -46,12 +46,11 @@ public class DailyRankingServiceImp implements DailyRankingService {
 
     private ProfitListResponseVo maptoDto (Tuple tuple) { //tuple to dto
 
-        Long won = tuple.get(dailyRanking.won);
         double profit  = tuple.get(dailyRanking.profit);
         String nickname = tuple.get(dailyRanking.nickname);
         Long todayRanking = tuple.get(dailyRanking.todayranking);
         Long changeRanking = tuple.get(dailyRanking.changeRanking);
-        return new ProfitListResponseVo(won, profit, nickname, todayRanking, changeRanking);
+        return new ProfitListResponseVo(profit, nickname, todayRanking, changeRanking);
 
     }
 
@@ -74,7 +73,8 @@ public class DailyRankingServiceImp implements DailyRankingService {
 
         }
         return new MyProfitResponseVo(dailyRanking.get().getNickname(),
-                dailyRanking.get().getTodayranking(),dailyRanking.get().getChangeRanking());
+                dailyRanking.get().getTodayranking(),dailyRanking.get().getChangeRanking()
+                ,dailyRanking.get().getProfit());
     }
 
 }

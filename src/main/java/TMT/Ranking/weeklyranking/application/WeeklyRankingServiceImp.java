@@ -45,12 +45,13 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
     }
 
     private WeeklyRankingResponseVo maptoDto (Tuple tuple) { //tuple to dto
-        Long won = tuple.get(weeklyRanking.won);
+
         double profit  = tuple.get(weeklyRanking.profit);
         String nickname = tuple.get(weeklyRanking.nickname);
         Long ranking = tuple.get(weeklyRanking.ranking);
         Long changeRanking = tuple.get(weeklyRanking.changeRanking);
-        return new WeeklyRankingResponseVo(nickname, won, profit, ranking, changeRanking);
+        return new WeeklyRankingResponseVo(nickname, profit, ranking, changeRanking);
+
     }
 
     @Override //주간랭킹 조회 리스트
@@ -71,7 +72,8 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
 
         }
         return new WeeklyMyRankingResponseVo(weeklyRanking.get().getNickname(),
-                weeklyRanking.get().getRanking(), weeklyRanking.get().getChangeRanking());
+                weeklyRanking.get().getRanking(), weeklyRanking.get().getChangeRanking()
+                ,weeklyRanking.get().getProfit());
     }
 
 }

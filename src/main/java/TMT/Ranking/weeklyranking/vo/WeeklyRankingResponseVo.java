@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class WeeklyRankingResponseVo {
 
     private String nickname;
-    private Long won;
     private double profit;
     private Long ranking;
     private Long changeRanking;
