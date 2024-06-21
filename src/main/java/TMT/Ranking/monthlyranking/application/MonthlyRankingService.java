@@ -6,4 +6,5 @@ public interface MonthlyRankingService {
 
     void updateMonthlyRankingChange();
 
+    void updateLastMonthRanking();
 }

@@ -11,4 +11,6 @@ public interface MonthlyRankingQueryDsl {
 
     void updateMonthlyRankingChange();
 
+    @Transactional
+    void updateLastMonthRanking();
 }

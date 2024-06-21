@@ -72,4 +72,14 @@ public class MonthlyRankingQueryDslImp implements MonthlyRankingQueryDsl{
                 .execute();
     }
 
+    @Transactional
+    @Override
+    public void updateLastMonthRanking(){
+
+        jpaQueryFactory
+                .update(monthlyRanking)
+                .set(monthlyRanking.lastMonthRanking, monthlyRanking.ranking)
+                .execute();
+    }
+
 }
