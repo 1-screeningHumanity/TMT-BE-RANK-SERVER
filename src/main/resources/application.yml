@@ -10,9 +10,6 @@ spring:
     username: ${RANKING_DB_USER}
     password: ${RANKING_DB_PW}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  batch:
-    jdbc:
-      initialize-schema: always
   jpa:
     hibernate:
       ddl-auto: update
