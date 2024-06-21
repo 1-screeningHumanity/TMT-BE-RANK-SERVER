@@ -184,7 +184,7 @@ public class DailyRankingJobConfig {
         return items ->{
             for(WeeklyRankingDto item : items){
                 if (weeklyRankingRepository.existsByUuid(item.getUuid())) {
-                    weeklyRankingQueryDslImp.updateWeekliRanking(item);
+                    weeklyRankingQueryDslImp.updateWeeklyRanking(item);
                 }else {
                     WeeklyRanking weeklyRanking = WeeklyRanking.builder()
                             .uuid(item.getUuid())

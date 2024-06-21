@@ -29,7 +29,7 @@ public class DailyRankingBatchScheduler {
 
     }
 
-    @Scheduled(cron = "0 09 11 ? * MON-FRI")
+    @Scheduled(cron = "0 10 17 ? * FRI")
     public void weeklyRankingBatchStart()
             throws Exception{
 
