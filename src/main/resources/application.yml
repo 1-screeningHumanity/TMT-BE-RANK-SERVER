@@ -43,7 +43,7 @@ logging:
     p6spy: info
 
 springdoc:
-  packages-to-scan: com.example
+  packages-to-scan: TMT.Ranking
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
@@ -68,4 +68,4 @@ kafka:
   bootstrap-server: ${KAFKA_SERVER}
 
 FEIGNCLIENT:
-  URL: ${PAYMENT_FEIGN_URL}
+  URL: ${PAYMENT_URL}
