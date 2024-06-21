@@ -14,10 +14,15 @@ public class MonthlyRankingServiceImp implements MonthlyRankingService{
 
 
     @Override
-    //    @Scheduled(cron = "0 30 16 L * *") 매월말일
-    @Scheduled(cron = "0 06 16 ? * FRI") //월간 수익률 집계
+    @Scheduled(cron = "0 30 16 L * *") //매월말일
     public void updateMonthlyRanking(){
         monthlyRankingQueryDslImp.monthlyRankingUpdate();
+    }
+
+    @Override
+    @Scheduled(cron = "0 15 16 ? * FRI")
+    public void updateMonthlyRankingChange(){
+        monthlyRankingQueryDslImp.updateMonthlyRankingChange();
     }
 
 

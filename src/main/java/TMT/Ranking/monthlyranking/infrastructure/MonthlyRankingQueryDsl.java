@@ -9,4 +9,6 @@ public interface MonthlyRankingQueryDsl {
 
     void monthlyRankingUpdate();
 
+    void updateMonthlyRankingChange();
+
 }

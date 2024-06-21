@@ -25,11 +25,14 @@ public class MonthlyRanking extends BaseEntity {
 
     private Long ranking;
 
-    private Long LastMonthRanking;
+    private Long lastMonthRanking;
 
     private Long won;
 
     private double profit;
+
+    private Long changeRanking; //순위변동
+
 
     @Builder
     public MonthlyRanking(String uuid, String nickname, Long won, double profit) {

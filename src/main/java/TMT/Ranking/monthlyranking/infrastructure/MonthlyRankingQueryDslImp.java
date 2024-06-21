@@ -1,11 +1,9 @@
 package TMT.Ranking.monthlyranking.infrastructure;
 
 import static TMT.Ranking.monthlyranking.domain.QMonthlyRanking.monthlyRanking;
-import static TMT.Ranking.weeklyranking.domain.QWeeklyRanking.weeklyRanking;
 
 import TMT.Ranking.monthlyranking.domain.MonthlyRanking;
 import TMT.Ranking.monthlyranking.dto.MonthlyRankingDto;
-import TMT.Ranking.weeklyranking.domain.WeeklyRanking;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +60,16 @@ public class MonthlyRankingQueryDslImp implements MonthlyRankingQueryDsl{
                     .execute();
         }
 
+    }
+
+    @Transactional
+    @Override
+    public void updateMonthlyRankingChange(){
+        jpaQueryFactory
+                .update(monthlyRanking)
+                .set(monthlyRanking.changeRanking, monthlyRanking.lastMonthRanking
+                        .subtract(monthlyRanking.ranking))
+                .execute();
     }
 
 }
