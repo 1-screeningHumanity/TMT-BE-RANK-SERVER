@@ -55,7 +55,7 @@ public class DailyWalletServiceImp implements DailyWalletService {
         }
     }
     @Override
-    @Scheduled(cron = "0 10 16 ? * MON-FRI")
+    @Scheduled(cron = "0 10 16 ? * MON-FRI") //어제금액 업데이트
     public void updateYesterdayWon(){
 
         dailyWalletInfoQueryDslImp.updateYesterdayWon();
