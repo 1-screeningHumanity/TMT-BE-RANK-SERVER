@@ -1,6 +1,7 @@
 package TMT.Ranking.global.common.exception;
 
 
+import TMT.Ranking.global.common.response.BaseResponseCode;
 import lombok.Getter;
 
 @Getter
