@@ -4,6 +4,7 @@ import static TMT.Ranking.weeklyranking.domain.QWeeklyRanking.weeklyRanking;
 
 import TMT.Ranking.weeklyranking.domain.WeeklyRanking;
 import TMT.Ranking.weeklyranking.dto.WeeklyRankingDto;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -80,6 +81,15 @@ public class WeeklyRankingQueryDslImp implements WeeklyRankingQeuryDsl{
                 .execute();
     }
 
+    @Override
+    public List<Tuple> getWeeklyRanking(){
+        return jpaQueryFactory
+                .select(weeklyRanking.changeRanking,weeklyRanking.won,
+                        weeklyRanking.profit, weeklyRanking.nickname, weeklyRanking.ranking)
+                .from(weeklyRanking)
+                .orderBy(weeklyRanking.profit.desc())
+                .fetch();
+    }
 
 
 

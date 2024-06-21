@@ -1,18 +1,13 @@
 package TMT.Ranking.weeklyranking.vo;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public class WeeklyRankingResponseVo {
+public class WeeklyMyRankingResponseVo {
 
     private String nickname;
-    private Long won;
-    private double profit;
     private Long ranking;
-    private Long changeRanking;
 
 }

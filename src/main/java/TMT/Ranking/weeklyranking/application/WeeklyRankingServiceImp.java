@@ -1,7 +1,14 @@
 package TMT.Ranking.weeklyranking.application;
 
 
+import static TMT.Ranking.batch.domain.QDailyRanking.dailyRanking;
+import static TMT.Ranking.weeklyranking.domain.QWeeklyRanking.weeklyRanking;
+
+import TMT.Ranking.batch.vo.ProfitListResponseVo;
 import TMT.Ranking.weeklyranking.infrastructure.WeeklyRankingQueryDslImp;
+import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
+import com.querydsl.core.Tuple;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,10 +38,22 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
         weeklyRankingQueryDslImp.updateLastWeekRanking();
     }
 
+    private WeeklyRankingResponseVo maptoDto (Tuple tuple) { //tuple to dto
+        Long won = tuple.get(weeklyRanking.won);
+        double profit  = tuple.get(weeklyRanking.profit);
+        String nickname = tuple.get(weeklyRanking.nickname);
+        Long ranking = tuple.get(weeklyRanking.ranking);
+        Long changeRanking = tuple.get(weeklyRanking.changeRanking);
+        return new WeeklyRankingResponseVo(nickname, won, profit, ranking, changeRanking);
+    }
 
+    @Override //주간랭킹 조회 리스트
+    public List<WeeklyRankingResponseVo> getWeeklyRanking(){
 
-
-
-
+        List<Tuple> tuples = weeklyRankingQueryDslImp.getWeeklyRanking();
+        List<WeeklyRankingResponseVo> weeklyRankingResponseVo = tuples.stream()
+                .map(this::maptoDto).toList();
+        return weeklyRankingResponseVo;
+    }
 
 }
