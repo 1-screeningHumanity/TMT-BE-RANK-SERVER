@@ -74,7 +74,7 @@ public class DailyRankingServiceImp implements DailyRankingService {
 
         }
         return new MyProfitResponseVo(dailyRanking.get().getNickname(),
-                dailyRanking.get().getTodayranking());
+                dailyRanking.get().getTodayranking(),dailyRanking.get().getChangeRanking());
     }
 
 }

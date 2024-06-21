@@ -1,14 +1,19 @@
 package TMT.Ranking.weeklyranking.application;
 
 
-import static TMT.Ranking.batch.domain.QDailyRanking.dailyRanking;
 import static TMT.Ranking.weeklyranking.domain.QWeeklyRanking.weeklyRanking;
 
-import TMT.Ranking.batch.vo.ProfitListResponseVo;
+import TMT.Ranking.batch.vo.MyProfitResponseVo;
+import TMT.Ranking.global.common.exception.CustomException;
+import TMT.Ranking.global.common.response.BaseResponseCode;
+import TMT.Ranking.weeklyranking.domain.WeeklyRanking;
 import TMT.Ranking.weeklyranking.infrastructure.WeeklyRankingQueryDslImp;
+import TMT.Ranking.weeklyranking.infrastructure.WeeklyRankingRepository;
+import TMT.Ranking.weeklyranking.vo.WeeklyMyRankingResponseVo;
 import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
 import com.querydsl.core.Tuple;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class WeeklyRankingServiceImp implements WeeklyRankingService{
 
     private final WeeklyRankingQueryDslImp weeklyRankingQueryDslImp;
+    private final WeeklyRankingRepository weeklyRankingRepository;
 
 
     @Override //주간랭킹 정산
@@ -54,6 +60,18 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
         List<WeeklyRankingResponseVo> weeklyRankingResponseVo = tuples.stream()
                 .map(this::maptoDto).toList();
         return weeklyRankingResponseVo;
+    }
+
+    @Override
+    public WeeklyMyRankingResponseVo getMyWeeklyRanking(String uuid){
+
+        Optional<WeeklyRanking> weeklyRanking = weeklyRankingRepository.findByUuid(uuid);
+        if(weeklyRanking.isEmpty()) {
+            throw new CustomException(BaseResponseCode.INCORRECT_UUID);
+
+        }
+        return new WeeklyMyRankingResponseVo(weeklyRanking.get().getNickname(),
+                weeklyRanking.get().getRanking(), weeklyRanking.get().getChangeRanking());
     }
 
 }

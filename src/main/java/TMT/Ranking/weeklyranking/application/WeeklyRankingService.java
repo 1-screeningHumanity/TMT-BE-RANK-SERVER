@@ -1,5 +1,6 @@
 package TMT.Ranking.weeklyranking.application;
 
+import TMT.Ranking.weeklyranking.vo.WeeklyMyRankingResponseVo;
 import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
 import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,5 +14,7 @@ public interface WeeklyRankingService {
     void updateLastWeekRanking();
 
     List<WeeklyRankingResponseVo> getWeeklyRanking();
+
+    WeeklyMyRankingResponseVo getMyWeeklyRanking(String uuid);
 
 }

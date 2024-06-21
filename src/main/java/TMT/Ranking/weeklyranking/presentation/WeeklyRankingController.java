@@ -2,7 +2,9 @@ package TMT.Ranking.weeklyranking.presentation;
 
 
 import TMT.Ranking.global.common.response.BaseResponse;
+import TMT.Ranking.global.common.token.DecodingToken;
 import TMT.Ranking.weeklyranking.application.WeeklyRankingServiceImp;
+import TMT.Ranking.weeklyranking.vo.WeeklyMyRankingResponseVo;
 import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WeeklyRankingController {
 
     private final WeeklyRankingServiceImp weeklyRankingServiceImp;
+    private final DecodingToken decodingToken;
 
     @GetMapping("/weekly/revenue")
     public BaseResponse<List<WeeklyRankingResponseVo>> getWeeklyRanking(){
@@ -26,11 +29,14 @@ public class WeeklyRankingController {
     }
 
     @GetMapping("/weekly/my-revenue")
-    public BaseResponse<List<WeeklyRankingResponseVo>> getLastWeekRanking(@RequestHeader
+    public BaseResponse<WeeklyMyRankingResponseVo> getLastWeekRanking(@RequestHeader
             ("Authorization") String jwt){
 
+        String uuid = decodingToken.getUuid(jwt);
+        WeeklyMyRankingResponseVo weeklyMyRankingResponseVo =
+                weeklyRankingServiceImp.getMyWeeklyRanking(uuid);
 
+        return new BaseResponse<>(weeklyMyRankingResponseVo);
 
-        return null;
     }
 }

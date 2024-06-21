@@ -9,5 +9,12 @@ public class WeeklyMyRankingResponseVo {
 
     private String nickname;
     private Long ranking;
+    private Long rankingChaneg;
+
+    public void getMyRanking(String nickname, Long ranking, Long rankingChaneg) {
+        this.nickname = nickname;
+        this.ranking = ranking;
+        this.rankingChaneg = rankingChaneg;
+    }
 
 }
