@@ -1,5 +1,7 @@
 package TMT.Ranking.monthlyranking.infrastructure;
 
+
+
 import static TMT.Ranking.monthlyranking.domain.QMonthlyRanking.monthlyRanking;
 
 import TMT.Ranking.monthlyranking.domain.MonthlyRanking;

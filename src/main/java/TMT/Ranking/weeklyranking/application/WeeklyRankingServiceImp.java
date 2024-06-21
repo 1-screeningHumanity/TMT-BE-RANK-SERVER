@@ -3,7 +3,6 @@ package TMT.Ranking.weeklyranking.application;
 
 import static TMT.Ranking.weeklyranking.domain.QWeeklyRanking.weeklyRanking;
 
-import TMT.Ranking.batch.vo.MyProfitResponseVo;
 import TMT.Ranking.global.common.exception.CustomException;
 import TMT.Ranking.global.common.response.BaseResponseCode;
 import TMT.Ranking.weeklyranking.domain.WeeklyRanking;
@@ -27,19 +26,19 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
 
 
     @Override //주간랭킹 정산
-    @Scheduled(cron = "0 20 17 ? * FRI")
+    @Scheduled(cron = "0 55 16 ? * FRI")
     public void createWeeklyRanking(){
         weeklyRankingQueryDslImp.createWeeklyRanking();
     }
 
     @Override //주간랭킹 순위변동 정산
-    @Scheduled(cron = "0 30 17 ? * FRI")
+    @Scheduled(cron = "0 0 17 ? * FRI")
     public void updateChangeWeeklyRanking(){
         weeklyRankingQueryDslImp.updateChangeWeeklyRanking();
     }
 
     @Override //주간랭킹 지난주순위 업데이트
-    @Scheduled(cron = "0 40 17 ? * FRI")
+    @Scheduled(cron = "0 05 17 ? * FRI")
     public void updateLastWeekRanking(){
         weeklyRankingQueryDslImp.updateLastWeekRanking();
     }

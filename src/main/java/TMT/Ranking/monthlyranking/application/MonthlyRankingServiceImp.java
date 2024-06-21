@@ -2,9 +2,6 @@ package TMT.Ranking.monthlyranking.application;
 
 
 import static TMT.Ranking.monthlyranking.domain.QMonthlyRanking.monthlyRanking;
-
-import TMT.Ranking.batch.domain.DailyRanking;
-import TMT.Ranking.batch.vo.MyProfitResponseVo;
 import TMT.Ranking.global.common.exception.CustomException;
 import TMT.Ranking.global.common.response.BaseResponseCode;
 import TMT.Ranking.monthlyranking.domain.MonthlyRanking;
@@ -38,6 +35,7 @@ public class MonthlyRankingServiceImp implements MonthlyRankingService{
     public void updateMonthlyRankingChange(){
         monthlyRankingQueryDslImp.updateMonthlyRankingChange();
     }
+
 
     @Override //지난달 월간 수익률 랭킹 순위 업데이트
     public void updateLastMonthRanking(){

@@ -13,9 +13,6 @@ import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +24,19 @@ public class DailyRankingServiceImp implements DailyRankingService {
     private final DailyRankingRepository dailyRankingRepository;
 
     @Override
-    @Scheduled(cron = "0 40 16 ? * MON-FRI")
+    @Scheduled(cron = "0 10 16 ? * MON-FRI")
     public void createRank(){
         dailyRankingQueryDslmp.updateDailyRank();
     }
 
     @Override
-    @Scheduled(cron = "0 50 16 ? * MON-FRI")
+    @Scheduled(cron = "0 20 16 ? * MON-FRI")
     public void updateYesterdayRanking(){
         dailyRankingQueryDslmp.updateYesterdayRanking();
     }
 
     @Override
-    @Scheduled(cron = "0 0 17 ? * MON-FRI")
+    @Scheduled(cron = "0 25 16 ? * MON-FRI")
     public void updateChangeRanking(){
         dailyRankingQueryDslmp.updateChangeRanking();
     }
