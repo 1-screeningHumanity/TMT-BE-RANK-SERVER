@@ -1,8 +1,8 @@
 package TMT.Ranking.kafka.application;
 
-
-import TMT.Ranking.kafka.dto.StockinfoDto;
-import TMT.Ranking.stockinfo.application.StockInfoServiceImp;
+import TMT.Ranking.batch.infrastructure.DailyRankingQueryDslmp;
+import TMT.Ranking.daliywallet.infrastructure.DailyWalletIQueryDslImp;
+import TMT.Ranking.kafka.dto.NicknameChangeDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +19,8 @@ import org.springframework.stereotype.Service;
 public class KafkaConsumerService {
 
     private final ObjectMapper  mapper = new ObjectMapper();
-    private final StockInfoServiceImp stockInfoService;
+    private final DailyRankingQueryDslmp dailyRankingQueryDslmp;
+    private final DailyWalletIQueryDslImp dailyWalletIQueryDslImp;
 
 
     //Json Parsing 처리
@@ -32,18 +33,17 @@ public class KafkaConsumerService {
         }
     }
 
-    @KafkaListener(topics = "chart-rank-sotckinfo")
-    public void stockinfo(String kafkaMessage){
+    @KafkaListener(topics ="member-subscribe-changenickname")
+    public void changenickname(String kafkaMessage){
+
         log.info("kafkaMessage : {}", kafkaMessage);
 
-        StockinfoDto stockinfoDto = parseMessage(kafkaMessage,
-                new TypeReference<StockinfoDto>(){});
+        NicknameChangeDto nicknameChangeDto = parseMessage(kafkaMessage,
+                new TypeReference<NicknameChangeDto>(){});
 
-        if(stockinfoDto != null) {
-            log.info("stockinfoDto : {}", stockinfoDto);
-        }
-        stockInfoService.stockInfoSave(stockinfoDto);
+        dailyRankingQueryDslmp.updateNickname(nicknameChangeDto);
+        dailyWalletIQueryDslImp.updateNickname(nicknameChangeDto);
+
     }
 
-//    @KafkaListener(topics = "trade-rank-")
 }

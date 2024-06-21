@@ -43,7 +43,7 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("default Service 테스트")
+                .title("Ranking Service 테스트")
                 .description("Springdoc을 사용한 Swagger UI 테스트")
                 .version("1.0.0");
     }
@@ -60,9 +60,8 @@ public class SwaggerConfig {
         localServer.setDescription("Local Test Server URL");
 
         Server dynamicServer = new Server();
-        //todo : service 명에 맞게 path 수정 필요.
-        dynamicServer.setUrl("https://screeninghumanity.shop/api/v1/default");
-        dynamicServer.setDescription("");
+        dynamicServer.setUrl("https://screeninghumanity.shop/api/v1/rank");
+        dynamicServer.setDescription("AWS 배포 서버");
 
         servers.add(localServer);
         servers.add(dynamicServer);
