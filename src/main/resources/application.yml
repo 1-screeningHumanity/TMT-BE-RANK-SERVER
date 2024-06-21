@@ -1,6 +1,6 @@
 spring:
   application:
-    name: TMT_Rank_server
+    name: rank_server
   batch:
     jdbc:
       initialize-schema: always
@@ -18,9 +18,11 @@ spring:
       hibernate:
         format_sql: true
 
-  redis:
-    host: ${REDIS_DB}
-    port: ${REDIS_PORT}
+  data:
+    redis:
+      host: ${REDIS_DB}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 
 server:
   port: 0
@@ -28,7 +30,7 @@ server:
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    hostname: member-server
+    hostname: rank_server
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -60,8 +62,6 @@ springdoc:
 
 #Token
 JWT:
-  access-expiration: 3000000     # 50?
-  refresh-expiration: 864000000 # 10?
   SECRET_KEY: sldkfjsoidfjwoeir12393012809vxcv89usdfkjn1203491iu0isdfl
 
 kafka:
