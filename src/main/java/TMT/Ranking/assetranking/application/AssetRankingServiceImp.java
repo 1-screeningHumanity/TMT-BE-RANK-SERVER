@@ -53,7 +53,7 @@ public class AssetRankingServiceImp implements AssetRankingService {
         String nickname = tuple.get(assetRanking.nickname);
         Long todayRanking = tuple.get(assetRanking.ranking);
         Long changeRanking = tuple.get(assetRanking.changeRanking);
-        return new AssetRankingResponseVo(nickname, won,todayRanking, changeRanking);
+        return new AssetRankingResponseVo(nickname, todayRanking, won,changeRanking);
 
     }
 
