@@ -1,5 +1,6 @@
 package TMT.Ranking.batch.presentation;
 
+import TMT.Ranking.assetranking.presentation.AssetRankingBatchJobConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -19,6 +20,7 @@ public class DailyRankingBatchScheduler {
     private final DailyRankingJobConfig dailyRankingJobConfig;
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
+    private final AssetRankingBatchJobConfig assetRankingBatchJobConfig;
 
     @Scheduled(cron = "0 10 16 ? * MON-FRI") //일간 수익률 집계
     public void dailyRankingBatchStart()
@@ -52,6 +54,18 @@ public class DailyRankingBatchScheduler {
                 .toJobParameters());
 
         log.info("start monthlyRankingBatch");
+    }
+
+    @Scheduled(cron = "0 15 17 ? * MON-FRI") //자산집계
+    public void assetRankingBatchStart()
+            throws Exception{
+
+        jobLauncher.run((Job) assetRankingBatchJobConfig.assetRankingBatchJob(
+                jobRepository,platformTransactionManager), new JobParametersBuilder()
+                .addLong("time", System.currentTimeMillis())
+                .toJobParameters());
+
+        log.info("assetBatch Start");
     }
 
 }
