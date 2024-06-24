@@ -8,6 +8,10 @@ import TMT.Ranking.daliywallet.domain.DailyWallet;
 import TMT.Ranking.daliywallet.infrastructure.DailyWalletRepository;
 import TMT.Ranking.global.common.exception.CustomException;
 import TMT.Ranking.global.common.response.BaseResponseCode;
+import TMT.Ranking.monthlyranking.domain.MonthlyRanking;
+import TMT.Ranking.monthlyranking.dto.MonthlyRankingDto;
+import TMT.Ranking.monthlyranking.infrastructure.MonthlyRankingQueryDslImp;
+import TMT.Ranking.monthlyranking.infrastructure.MonthlyRankingRepository;
 import TMT.Ranking.weeklyranking.domain.WeeklyRanking;
 import TMT.Ranking.weeklyranking.dto.WeeklyRankingDto;
 import TMT.Ranking.weeklyranking.infrastructure.WeeklyRankingQueryDslImp;
@@ -43,12 +47,14 @@ public class DailyRankingJobConfig {
     private final DailyRankingQueryDslmp dailyRankingQueryDslmp;
     private final WeeklyRankingRepository weeklyRankingRepository;
     private final WeeklyRankingQueryDslImp weeklyRankingQueryDslImp;
+    private final MonthlyRankingQueryDslImp monthlyRankingQueryDslImp;
+    private final MonthlyRankingRepository monthlyRankingRepository;
 
     @Bean //일일랭킹 집계
     public Job dailyRankingJob(JobRepository jobRepository,
             PlatformTransactionManager transactionManager) {
 
-        return new JobBuilder("DailyRankingJob", jobRepository)
+        return new JobBuilder("dailyRankingJob", jobRepository)
                 .start(dailyRankingStep(jobRepository, transactionManager))
                 .build();
 
@@ -58,7 +64,7 @@ public class DailyRankingJobConfig {
     public Step dailyRankingStep(JobRepository jobRepository,
             PlatformTransactionManager transactionManager) {
 
-        return new StepBuilder("DailyRankingStep", jobRepository)
+        return new StepBuilder("dailyRankingStep", jobRepository)
                 .<DailyWallet, DailyRankingDto>chunk(10, transactionManager)
                 .reader(dailyRankingReader())
                 .processor(dailyRankingProcessor())
@@ -124,7 +130,7 @@ public class DailyRankingJobConfig {
     public Job weeklyRanking(JobRepository jobRepository,
             PlatformTransactionManager transactionManager){
 
-        return new JobBuilder("WeeklyRanking", jobRepository)
+        return new JobBuilder("weeklyRanking", jobRepository)
                 .start(weeklyRankingStep(jobRepository, transactionManager))
                 .build();
 
@@ -135,7 +141,7 @@ public class DailyRankingJobConfig {
     public Step weeklyRankingStep(JobRepository jobRepository,
             PlatformTransactionManager transactionManager){
 
-        return new StepBuilder("DailyRankingStep", jobRepository)
+        return new StepBuilder("weeklyRankingStep", jobRepository)
                 .<DailyWallet, WeeklyRankingDto>chunk(10, transactionManager)
                 .reader(weeklyRankingReader())
                 .processor(weeklyRankingProcessor())
@@ -196,6 +202,87 @@ public class DailyRankingJobConfig {
                     weeklyRankingRepository.save(weeklyRanking);
                 }
                 log.info("save weeklyRanking");
+            }
+        };
+    }
+
+
+
+    @Bean //월간수익률 집계
+    public Job monthlyRanking(JobRepository jobRepository,
+            PlatformTransactionManager transactionManager){
+
+        return new JobBuilder("monthlyRanking", jobRepository)
+                .start(monthlyRankingStep(jobRepository, transactionManager))
+                .build();
+
+    }
+
+    @Bean //월간수익률 집계 Step
+    public Step monthlyRankingStep(JobRepository jobRepository,
+            PlatformTransactionManager transactionManager){
+
+        return new StepBuilder("monthlyRankingStep", jobRepository)
+                .<DailyWallet, MonthlyRankingDto>chunk(10, transactionManager)
+                .reader(monthlyRankingReader())
+                .processor(monthlyRankingProcessor())
+                .writer(monthlyRankingWriter())
+                .build();
+    }
+
+    @Bean //월간수익률 집계 ItemReader
+    public ItemReader<DailyWallet> monthlyRankingReader() {
+        return new RepositoryItemReaderBuilder<DailyWallet>()
+                .name("readWalletInfo")
+                .repository(dailyWalletRepository)
+                .methodName("findAll")
+                .pageSize(10)
+                .sorts(Collections.singletonMap("uuid", Sort.Direction.ASC))
+                .build();
+    }
+
+    @Bean //월간수익률 집계 ItemProcessor
+    public ItemProcessor<DailyWallet, MonthlyRankingDto> monthlyRankingProcessor(){
+
+        return dailyWallet -> {
+            if (dailyWallet.getLastMonthWon() == null && dailyWallet.getLastMonthEndWon() == null) {
+                throw new CustomException(BaseResponseCode.NO_DATA);
+            }
+            double profit = ((double) (dailyWallet.getLastMonthEndWon()  //수익률 구하는 연산
+                    - dailyWallet.getLastMonthWon()) / dailyWallet.getLastMonthWon()) * 100;
+
+            //수익률 소숫점 3자리로 제한
+            BigDecimal roundedProfit =
+                    new BigDecimal(profit).setScale(3, RoundingMode.HALF_UP);
+
+            return MonthlyRankingDto
+                    .builder()
+                    .uuid(dailyWallet.getUuid())
+                    .won(dailyWallet.getFridayWon())
+                    .profit(roundedProfit.doubleValue())
+                    .nickname(dailyWallet.getNickname())
+                    .build();
+        };
+
+    }
+
+    @Bean //월간수익률 ItemReader
+    public ItemWriter<MonthlyRankingDto> monthlyRankingWriter() {
+        return items ->{
+            for(MonthlyRankingDto item : items){
+                if (monthlyRankingRepository.existsByUuid(item.getUuid())) {
+                    monthlyRankingQueryDslImp.monthlyRankingCreate(item);
+                }else {
+                    MonthlyRanking monthlyRanking = MonthlyRanking.builder()
+                            .uuid(item.getUuid())
+                            .won(item.getWon())
+                            .profit(item.getProfit())
+                            .nickname(item.getNickname())
+                            .build();
+
+                    monthlyRankingRepository.save(monthlyRanking);
+                }
+                log.info("save monthlyRanking");
             }
         };
     }
