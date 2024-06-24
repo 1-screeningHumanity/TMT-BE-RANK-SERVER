@@ -26,7 +26,7 @@ public class AssetRankingServiceImp implements AssetRankingService {
     private final AssetRankingQueryDslImp assetRankingQueryDslImp;
     private final AssetRankingRepository assetRankingRepository;
 
-    @Scheduled(cron = "0 35 11 ? * MON-FRI")
+    @Scheduled(cron = "0 20 17 ? * MON-FRI")
     @Override
     public void updateAssetRanking(){
         log.info("start AssetRanking");
@@ -34,14 +34,14 @@ public class AssetRankingServiceImp implements AssetRankingService {
     }
 
     @Override
-    @Scheduled(cron = "0 46 11 ? * MON-FRI")
+    @Scheduled(cron = "0 25 17 ? * MON-FRI")
     public void updateRankingChange(){
         log.info("start updateRankingChange");
         assetRankingQueryDslImp.updateRankingChange();
     }
 
     @Override
-    @Scheduled(cron = "0 49 11 ? * MON-FRI")
+    @Scheduled(cron = "0 30 17 ? * MON-FRI")
     public void updateYesterdayRanking(){
         log.info("start updateYesterdayRanking");
         assetRankingQueryDslImp.updateYesterdayRanking();

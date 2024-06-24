@@ -56,7 +56,7 @@ public class DailyRankingBatchScheduler {
         log.info("start monthlyRankingBatch");
     }
 
-    @Scheduled(cron = "0 17 11 ? * MON-FRI") //자산집계
+    @Scheduled(cron = "0 15 17 ? * MON-FRI") //자산집계
     public void assetRankingBatchStart()
             throws Exception{
 
