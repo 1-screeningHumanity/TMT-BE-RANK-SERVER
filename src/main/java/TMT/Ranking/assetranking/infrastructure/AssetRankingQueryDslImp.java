@@ -4,6 +4,7 @@ import static TMT.Ranking.assetranking.domain.QAssetRanking.assetRanking;
 
 import TMT.Ranking.assetranking.domain.AssetRanking;
 import TMT.Ranking.assetranking.dto.AssetRankingDto;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -80,5 +81,16 @@ public class AssetRankingQueryDslImp implements AssetRankingQueryDsl{
                 .update(assetRanking)
                 .set(assetRanking.yesterdayRanking, assetRanking.ranking)
                 .execute();
+    }
+
+    @Override
+    public List<Tuple> getAssetRanking(){
+
+        return jpaQueryFactory
+                .select(assetRanking.nickname, assetRanking.ranking,
+                        assetRanking.won, assetRanking.changeRanking)
+                .from(assetRanking)
+                .orderBy(assetRanking.won.desc())
+                .fetch();
     }
 }

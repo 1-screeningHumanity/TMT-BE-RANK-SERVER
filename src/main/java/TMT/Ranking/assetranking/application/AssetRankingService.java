@@ -1,13 +1,20 @@
 package TMT.Ranking.assetranking.application;
 
+import TMT.Ranking.assetranking.vo.AssetRankingResponseVo;
+import TMT.Ranking.assetranking.vo.MyAssetRankingResponseVo;
+import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 
 public interface AssetRankingService {
 
-    @Scheduled(cron = "0 25 11 ? * MON-FRI")
     void updateAssetRanking();
 
     void updateRankingChange();
 
     void updateYesterdayRanking();
+
+    List<AssetRankingResponseVo> getAssetRanking();
+
+    MyAssetRankingResponseVo getMyAssetRanking(String uuid);
+
 }
