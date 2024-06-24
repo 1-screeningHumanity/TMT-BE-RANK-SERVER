@@ -29,4 +29,14 @@ public class DailyRankingBatchScheduler {
 
     }
 
+    @Scheduled(cron = "0 10 17 ? * FRI")
+    public void weeklyRankingBatchStart()
+            throws Exception{
+
+        jobLauncher.run((Job) dailyRankingJobConfig.weeklyRanking(
+                jobRepository,platformTransactionManager), new JobParametersBuilder()
+                .addLong("time", System.currentTimeMillis())
+                .toJobParameters());
+    }
+
 }

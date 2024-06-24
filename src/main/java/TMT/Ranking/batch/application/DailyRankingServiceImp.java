@@ -61,8 +61,6 @@ public class DailyRankingServiceImp implements DailyRankingService {
         List<Tuple> tuples = dailyRankingQueryDslmp.getRanking();
         List<ProfitListResponseVo> profitListResponseVo = tuples.stream()
                 .map(this::maptoDto).toList();
-
-
         return profitListResponseVo;
 
     }
@@ -75,9 +73,8 @@ public class DailyRankingServiceImp implements DailyRankingService {
             throw new CustomException(BaseResponseCode.INCORRECT_UUID);
 
         }
-
         return new MyProfitResponseVo(dailyRanking.get().getNickname(),
-                dailyRanking.get().getTodayranking());
+                dailyRanking.get().getTodayranking(),dailyRanking.get().getChangeRanking());
     }
 
 }
