@@ -13,11 +13,5 @@ public class MyProfitResponseVo {
     private Long changeRanking;
     private double profit;
 
-    public void getMyProfit(String nickname, Long todayRanking, Long changeRanking, double profit) {
-        this.nickname = nickname;
-        this.todayRanking = todayRanking;
-        this.changeRanking = changeRanking;
-        this.profit = profit;
-    }
 
 }
