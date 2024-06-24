@@ -22,8 +22,17 @@ public class AssetRankingServiceImp implements AssetRankingService {
     }
 
     @Override
+    @Scheduled(cron = "0 46 11 ? * MON-FRI")
     public void updateRankingChange(){
-        assetRankingQueryDslImp
+        log.info("start updateRankingChange");
+        assetRankingQueryDslImp.updateRankingChange();
+    }
+
+    @Override
+    @Scheduled(cron = "0 49 11 ? * MON-FRI")
+    public void updateYesterdayRanking(){
+        log.info("start updateYesterdayRanking");
+        assetRankingQueryDslImp.updateYesterdayRanking();
     }
 
 }

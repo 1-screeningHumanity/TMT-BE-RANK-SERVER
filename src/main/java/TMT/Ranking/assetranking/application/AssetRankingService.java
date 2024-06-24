@@ -8,4 +8,6 @@ public interface AssetRankingService {
     void updateAssetRanking();
 
     void updateRankingChange();
+
+    void updateYesterdayRanking();
 }

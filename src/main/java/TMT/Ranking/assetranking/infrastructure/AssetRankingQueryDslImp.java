@@ -61,11 +61,24 @@ public class AssetRankingQueryDslImp implements AssetRankingQueryDsl{
     }
 
     @Override
-    @Transactional
+    @Transactional //자산 랭킹 변동 순위 정산
     public void updateRankingChange(){
 
         jpaQueryFactory
                 .update(assetRanking)
-                .set(assetRanking)
+                .set(assetRanking.changeRanking,
+                        assetRanking.yesterdayRanking.subtract(assetRanking.ranking))
+                .execute();
+
+    }
+
+    @Override
+    @Transactional //어제 자산랭킹 순위 정산
+    public void updateYesterdayRanking(){
+
+        jpaQueryFactory
+                .update(assetRanking)
+                .set(assetRanking.yesterdayRanking, assetRanking.ranking)
+                .execute();
     }
 }

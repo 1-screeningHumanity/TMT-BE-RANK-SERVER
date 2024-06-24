@@ -11,4 +11,7 @@ public interface AssetRankingQueryDsl {
 
     @Transactional
     void updateRankingChange();
+
+    @Transactional
+    void updateYesterdayRanking();
 }
