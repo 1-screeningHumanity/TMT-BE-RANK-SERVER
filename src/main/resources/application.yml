@@ -2,9 +2,8 @@ spring:
   application:
     name: rank-server
   batch:
-    jdbc:
-      initialize-schema: always
-
+      jdbc:
+        initialize-schema: always
   datasource:
     url: ${RANKING_DB}
     username: ${RANKING_DB_USER}

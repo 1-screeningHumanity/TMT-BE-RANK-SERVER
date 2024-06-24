@@ -3,6 +3,7 @@ package TMT.Ranking.batch.infrastructure;
 import static TMT.Ranking.batch.domain.QDailyRanking.dailyRanking;
 
 import TMT.Ranking.batch.domain.DailyRanking;
+import TMT.Ranking.batch.dto.DailyRankingDto;
 import TMT.Ranking.kafka.dto.NicknameChangeDto;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,14 +20,13 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
 
     @Transactional
     @Override //수익률 정산
-    public void updateDailyRanking(String uuid, Long won,
-            double profit, String nickname)
+    public void updateDailyRanking(DailyRankingDto dailyRankingDto)
     {
         jpaQueryFactory.update(dailyRanking)
-                .set(dailyRanking.won, won)
-                .set(dailyRanking.profit, profit)
-                .set(dailyRanking.nickname, nickname)
-                .where(dailyRanking.uuid.eq(uuid))
+                .set(dailyRanking.won,dailyRankingDto.getTodayWon())
+                .set(dailyRanking.profit, dailyRankingDto.getProfit())
+                .set(dailyRanking.nickname, dailyRankingDto.getNickname())
+                .where(dailyRanking.uuid.eq(dailyRankingDto.getUuid()))
                 .execute();
     }
 
@@ -98,7 +98,7 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
     public List<Tuple> getRanking(){
 
         return jpaQueryFactory
-                .select(dailyRanking.profit, dailyRanking.nickname, dailyRanking.won,
+                .select(dailyRanking.profit, dailyRanking.nickname,
                         dailyRanking.todayranking, dailyRanking.changeRanking)
                 .from(dailyRanking)
                 .orderBy(dailyRanking.profit.desc())

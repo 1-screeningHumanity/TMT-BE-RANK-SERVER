@@ -22,7 +22,7 @@ public class DailyWalletServiceImp implements DailyWalletService {
 
 
     @Override
-    @Scheduled(cron = "0 0 16 ? * MON-FRI") //오후 4시 에 실행
+    @Scheduled(cron = "0 40 15 ? * MON-FRI")
     public void walletInfoRequest() {
 
         // Feign 클라이언트를 통해, walletinfo 받아옴
@@ -55,21 +55,21 @@ public class DailyWalletServiceImp implements DailyWalletService {
         }
     }
     @Override
-    @Scheduled(cron = "0 10 16 ? * MON-FRI")
+    @Scheduled(cron = "0 45 15 ? * MON-FRI") //어제금액 업데이트
     public void updateYesterdayWon(){
 
         dailyWalletInfoQueryDslImp.updateYesterdayWon();
     }
 
     @Override
-    @Scheduled(cron = "0 20 16 ? * MON") //매주 월요일
+    @Scheduled(cron = "0 50 15 ? * MON") //매주 월요일
     public void updateMondayWon(){
         dailyWalletInfoQueryDslImp.updateMondayWon();
         log.info("lastMondayWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 20 16 ? * FRI") //매주 금요일
+    @Scheduled(cron = "0 55 15 ? * FRI") //매주 금요일
     public void updateFridayWon(){
 
         dailyWalletInfoQueryDslImp.updateMondayWon();
@@ -77,14 +77,14 @@ public class DailyWalletServiceImp implements DailyWalletService {
     }
 
     @Override
-    @Scheduled(cron = "0 30 16 1 * *") //매월 1일
+    @Scheduled(cron = "0 0 16 1 * *") //매월 1일
     public void updateLastMonthWon(){
         dailyWalletInfoQueryDslImp.updateLastMonthWon();
         log.info("lastMonthWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 30 16 L * *")  //매월 말일
+    @Scheduled(cron = "0 05 16 L * *")  //매월 말일
     public void updateLastMonthEndWon(){
 
         dailyWalletInfoQueryDslImp.updateLastMonthEndWon();

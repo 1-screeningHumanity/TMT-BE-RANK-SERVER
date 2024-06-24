@@ -1,21 +1,21 @@
-package TMT.Ranking.batch.vo;
-
+package TMT.Ranking.monthlyranking.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MyProfitResponseVo {
+public class MonthlyMyRankingResponseVo {
+
 
     private String nickname;
-    private Long todayRanking;
+    private Long ranking;
     private Long changeRanking;
     private double profit;
 
-    public void getMyProfit(String nickname, Long todayRanking, Long changeRanking, double profit) {
+    public void getMyProfit(String nickname, Long ranking, Long changeRanking, double profit) {
         this.nickname = nickname;
-        this.todayRanking = todayRanking;
+        this.ranking = ranking;
         this.changeRanking = changeRanking;
         this.profit = profit;
     }
