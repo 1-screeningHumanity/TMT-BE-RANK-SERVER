@@ -125,166 +125,166 @@ public class DailyRankingJobConfig {
             log.info("save dailyRanking");
         };
     }
-
-    @Bean //주간랭킹 집계
-    public Job weeklyRanking(JobRepository jobRepository,
-            PlatformTransactionManager transactionManager){
-
-        return new JobBuilder("weeklyRanking", jobRepository)
-                .start(weeklyRankingStep(jobRepository, transactionManager))
-                .build();
-
-
-    }
-
-    @Bean //주간랭킹 집계 Step
-    public Step weeklyRankingStep(JobRepository jobRepository,
-            PlatformTransactionManager transactionManager){
-
-        return new StepBuilder("weeklyRankingStep", jobRepository)
-                .<DailyWallet, WeeklyRankingDto>chunk(10, transactionManager)
-                .reader(weeklyRankingReader())
-                .processor(weeklyRankingProcessor())
-                .writer(weeklyRankingWriter())
-                .build();
-    }
-
-    @Bean
-    public ItemReader<DailyWallet> weeklyRankingReader() {
-        return new RepositoryItemReaderBuilder<DailyWallet>()
-                .name("readWalletInfo")
-                .repository(dailyWalletRepository)
-                .methodName("findAll")
-                .pageSize(10)
-                .sorts(Collections.singletonMap("uuid", Sort.Direction.ASC))
-                .build();
-    }
-
-    @Bean
-    public ItemProcessor<DailyWallet, WeeklyRankingDto> weeklyRankingProcessor(){
-
-        return dailyWallet -> {
-            if (dailyWallet.getLastMondayWon() == null && dailyWallet.getFridayWon() == null) {
-                throw new CustomException(BaseResponseCode.NO_DATA);
-            }
-            double profit = ((double) (dailyWallet.getFridayWon()  //수익률 구하는 연산
-                    - dailyWallet.getLastMondayWon()) / dailyWallet.getLastMondayWon()) * 100;
-
-            //수익률 소숫점 3자리로 제한
-            BigDecimal roundedProfit =
-                    new BigDecimal(profit).setScale(3, RoundingMode.HALF_UP);
-
-            return WeeklyRankingDto
-                    .builder()
-                    .uuid(dailyWallet.getUuid())
-                    .won(dailyWallet.getFridayWon())
-                    .profit(roundedProfit.doubleValue())
-                    .nickname(dailyWallet.getNickname())
-                    .build();
-        };
-
-    }
-
-    @Bean
-    public ItemWriter<WeeklyRankingDto> weeklyRankingWriter() {
-        return items ->{
-            for(WeeklyRankingDto item : items){
-                if (weeklyRankingRepository.existsByUuid(item.getUuid())) {
-                    weeklyRankingQueryDslImp.updateWeeklyRanking(item);
-                }else {
-                    WeeklyRanking weeklyRanking = WeeklyRanking.builder()
-                            .uuid(item.getUuid())
-                            .won(item.getWon())
-                            .profit(item.getProfit())
-                            .nickname(item.getNickname())
-                            .build();
-
-                    weeklyRankingRepository.save(weeklyRanking);
-                }
-                log.info("save weeklyRanking");
-            }
-        };
-    }
-
-
-
-    @Bean //월간수익률 집계
-    public Job monthlyRanking(JobRepository jobRepository,
-            PlatformTransactionManager transactionManager){
-
-        return new JobBuilder("monthlyRanking", jobRepository)
-                .start(monthlyRankingStep(jobRepository, transactionManager))
-                .build();
-
-    }
-
-    @Bean //월간수익률 집계 Step
-    public Step monthlyRankingStep(JobRepository jobRepository,
-            PlatformTransactionManager transactionManager){
-
-        return new StepBuilder("monthlyRankingStep", jobRepository)
-                .<DailyWallet, MonthlyRankingDto>chunk(10, transactionManager)
-                .reader(monthlyRankingReader())
-                .processor(monthlyRankingProcessor())
-                .writer(monthlyRankingWriter())
-                .build();
-    }
-
-    @Bean //월간수익률 집계 ItemReader
-    public ItemReader<DailyWallet> monthlyRankingReader() {
-        return new RepositoryItemReaderBuilder<DailyWallet>()
-                .name("readWalletInfo")
-                .repository(dailyWalletRepository)
-                .methodName("findAll")
-                .pageSize(10)
-                .sorts(Collections.singletonMap("uuid", Sort.Direction.ASC))
-                .build();
-    }
-
-    @Bean //월간수익률 집계 ItemProcessor
-    public ItemProcessor<DailyWallet, MonthlyRankingDto> monthlyRankingProcessor(){
-
-        return dailyWallet -> {
-            if (dailyWallet.getLastMonthWon() == null && dailyWallet.getLastMonthEndWon() == null) {
-                throw new CustomException(BaseResponseCode.NO_DATA);
-            }
-            double profit = ((double) (dailyWallet.getLastMonthEndWon()  //수익률 구하는 연산
-                    - dailyWallet.getLastMonthWon()) / dailyWallet.getLastMonthWon()) * 100;
-
-            //수익률 소숫점 3자리로 제한
-            BigDecimal roundedProfit =
-                    new BigDecimal(profit).setScale(3, RoundingMode.HALF_UP);
-
-            return MonthlyRankingDto
-                    .builder()
-                    .uuid(dailyWallet.getUuid())
-                    .won(dailyWallet.getFridayWon())
-                    .profit(roundedProfit.doubleValue())
-                    .nickname(dailyWallet.getNickname())
-                    .build();
-        };
-
-    }
-
-    @Bean //월간수익률 ItemReader
-    public ItemWriter<MonthlyRankingDto> monthlyRankingWriter() {
-        return items ->{
-            for(MonthlyRankingDto item : items){
-                if (monthlyRankingRepository.existsByUuid(item.getUuid())) {
-                    monthlyRankingQueryDslImp.monthlyRankingCreate(item);
-                }else {
-                    MonthlyRanking monthlyRanking = MonthlyRanking.builder()
-                            .uuid(item.getUuid())
-                            .won(item.getWon())
-                            .profit(item.getProfit())
-                            .nickname(item.getNickname())
-                            .build();
-
-                    monthlyRankingRepository.save(monthlyRanking);
-                }
-                log.info("save monthlyRanking");
-            }
-        };
-    }
+//
+//    @Bean //주간랭킹 집계
+//    public Job weeklyRanking(JobRepository jobRepository,
+//            PlatformTransactionManager transactionManager){
+//
+//        return new JobBuilder("weeklyRanking", jobRepository)
+//                .start(weeklyRankingStep(jobRepository, transactionManager))
+//                .build();
+//
+//
+//    }
+//
+//    @Bean //주간랭킹 집계 Step
+//    public Step weeklyRankingStep(JobRepository jobRepository,
+//            PlatformTransactionManager transactionManager){
+//
+//        return new StepBuilder("weeklyRankingStep", jobRepository)
+//                .<DailyWallet, WeeklyRankingDto>chunk(10, transactionManager)
+//                .reader(weeklyRankingReader())
+//                .processor(weeklyRankingProcessor())
+//                .writer(weeklyRankingWriter())
+//                .build();
+//    }
+//
+//    @Bean
+//    public ItemReader<DailyWallet> weeklyRankingReader() {
+//        return new RepositoryItemReaderBuilder<DailyWallet>()
+//                .name("readWalletInfo")
+//                .repository(dailyWalletRepository)
+//                .methodName("findAll")
+//                .pageSize(10)
+//                .sorts(Collections.singletonMap("uuid", Sort.Direction.ASC))
+//                .build();
+//    }
+//
+//    @Bean
+//    public ItemProcessor<DailyWallet, WeeklyRankingDto> weeklyRankingProcessor(){
+//
+//        return dailyWallet -> {
+//            if (dailyWallet.getLastMondayWon() == null && dailyWallet.getFridayWon() == null) {
+//                throw new CustomException(BaseResponseCode.NO_DATA);
+//            }
+//            double profit = ((double) (dailyWallet.getFridayWon()  //수익률 구하는 연산
+//                    - dailyWallet.getLastMondayWon()) / dailyWallet.getLastMondayWon()) * 100;
+//
+//            //수익률 소숫점 3자리로 제한
+//            BigDecimal roundedProfit =
+//                    new BigDecimal(profit).setScale(3, RoundingMode.HALF_UP);
+//
+//            return WeeklyRankingDto
+//                    .builder()
+//                    .uuid(dailyWallet.getUuid())
+//                    .won(dailyWallet.getFridayWon())
+//                    .profit(roundedProfit.doubleValue())
+//                    .nickname(dailyWallet.getNickname())
+//                    .build();
+//        };
+//
+//    }
+//
+//    @Bean
+//    public ItemWriter<WeeklyRankingDto> weeklyRankingWriter() {
+//        return items ->{
+//            for(WeeklyRankingDto item : items){
+//                if (weeklyRankingRepository.existsByUuid(item.getUuid())) {
+//                    weeklyRankingQueryDslImp.updateWeeklyRanking(item);
+//                }else {
+//                    WeeklyRanking weeklyRanking = WeeklyRanking.builder()
+//                            .uuid(item.getUuid())
+//                            .won(item.getWon())
+//                            .profit(item.getProfit())
+//                            .nickname(item.getNickname())
+//                            .build();
+//
+//                    weeklyRankingRepository.save(weeklyRanking);
+//                }
+//                log.info("save weeklyRanking");
+//            }
+//        };
+//    }
+//
+//
+//
+//    @Bean //월간수익률 집계
+//    public Job monthlyRanking(JobRepository jobRepository,
+//            PlatformTransactionManager transactionManager){
+//
+//        return new JobBuilder("monthlyRanking", jobRepository)
+//                .start(monthlyRankingStep(jobRepository, transactionManager))
+//                .build();
+//
+//    }
+//
+//    @Bean //월간수익률 집계 Step
+//    public Step monthlyRankingStep(JobRepository jobRepository,
+//            PlatformTransactionManager transactionManager){
+//
+//        return new StepBuilder("monthlyRankingStep", jobRepository)
+//                .<DailyWallet, MonthlyRankingDto>chunk(10, transactionManager)
+//                .reader(monthlyRankingReader())
+//                .processor(monthlyRankingProcessor())
+//                .writer(monthlyRankingWriter())
+//                .build();
+//    }
+//
+//    @Bean //월간수익률 집계 ItemReader
+//    public ItemReader<DailyWallet> monthlyRankingReader() {
+//        return new RepositoryItemReaderBuilder<DailyWallet>()
+//                .name("readWalletInfo")
+//                .repository(dailyWalletRepository)
+//                .methodName("findAll")
+//                .pageSize(10)
+//                .sorts(Collections.singletonMap("uuid", Sort.Direction.ASC))
+//                .build();
+//    }
+//
+//    @Bean //월간수익률 집계 ItemProcessor
+//    public ItemProcessor<DailyWallet, MonthlyRankingDto> monthlyRankingProcessor(){
+//
+//        return dailyWallet -> {
+//            if (dailyWallet.getLastMonthWon() == null && dailyWallet.getLastMonthEndWon() == null) {
+//                throw new CustomException(BaseResponseCode.NO_DATA);
+//            }
+//            double profit = ((double) (dailyWallet.getLastMonthEndWon()  //수익률 구하는 연산
+//                    - dailyWallet.getLastMonthWon()) / dailyWallet.getLastMonthWon()) * 100;
+//
+//            //수익률 소숫점 3자리로 제한
+//            BigDecimal roundedProfit =
+//                    new BigDecimal(profit).setScale(3, RoundingMode.HALF_UP);
+//
+//            return MonthlyRankingDto
+//                    .builder()
+//                    .uuid(dailyWallet.getUuid())
+//                    .won(dailyWallet.getFridayWon())
+//                    .profit(roundedProfit.doubleValue())
+//                    .nickname(dailyWallet.getNickname())
+//                    .build();
+//        };
+//
+//    }
+//
+//    @Bean //월간수익률 ItemReader
+//    public ItemWriter<MonthlyRankingDto> monthlyRankingWriter() {
+//        return items ->{
+//            for(MonthlyRankingDto item : items){
+//                if (monthlyRankingRepository.existsByUuid(item.getUuid())) {
+//                    monthlyRankingQueryDslImp.monthlyRankingCreate(item);
+//                }else {
+//                    MonthlyRanking monthlyRanking = MonthlyRanking.builder()
+//                            .uuid(item.getUuid())
+//                            .won(item.getWon())
+//                            .profit(item.getProfit())
+//                            .nickname(item.getNickname())
+//                            .build();
+//
+//                    monthlyRankingRepository.save(monthlyRanking);
+//                }
+//                log.info("save monthlyRanking");
+//            }
+//        };
+//    }
 
 }
