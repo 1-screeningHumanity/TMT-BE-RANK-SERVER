@@ -5,6 +5,9 @@ spring:
   batch:
       jdbc:
         initialize-schema: always
+#      job:
+#        name: dailyRankingJob, weeklyRankingJob, monthlyRankingJob, assetRankingJob
+#        enabled: true
 
   datasource:
     url: ${RANKING_DB}
@@ -14,13 +17,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+  flyway:
+
 
 server:
-  port: 8084
+  port: 0
 
 eureka:
   instance:
