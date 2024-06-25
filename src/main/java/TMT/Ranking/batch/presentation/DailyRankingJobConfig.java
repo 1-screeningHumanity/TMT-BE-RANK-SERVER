@@ -123,7 +123,7 @@ public class DailyRankingJobConfig {
             log.info("save dailyRanking");
         };
     }
-//
+
 //    @Bean //주간랭킹 집계
 //    public Job weeklyRanking(JobRepository jobRepository,
 //            PlatformTransactionManager transactionManager){

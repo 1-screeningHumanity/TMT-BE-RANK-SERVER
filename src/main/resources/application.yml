@@ -6,8 +6,8 @@ spring:
       jdbc:
         initialize-schema: always
       job:
-        names: dailyRankingJob, weeklyRankingJob, monthlyRankingJob, assetRankingJob
-        enabled: true
+        name: dailyRankingJob, weeklyRanking, monthlyRanking, assetRankingBatchJob
+        enabled: false
 
   datasource:
     url: ${RANKING_DB}
