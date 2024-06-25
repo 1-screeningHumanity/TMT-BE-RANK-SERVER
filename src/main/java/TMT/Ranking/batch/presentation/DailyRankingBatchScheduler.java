@@ -26,7 +26,7 @@ public class DailyRankingBatchScheduler {
     private final WeeklyRankingJobConfig weeklyRankingJobConfig;
     private final MonthlyRankingJobConfig monthlyRankingBatchConfig;
 
-    @Scheduled(cron = "0 36 19 ? * MON-FRI") //일간 수익률 집계
+    @Scheduled(cron = "0 35 19 ? * MON-FRI") //일간 수익률 집계
     public void dailyRankingBatchStart()
             throws Exception{
 

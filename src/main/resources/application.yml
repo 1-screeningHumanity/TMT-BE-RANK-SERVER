@@ -5,9 +5,9 @@ spring:
   batch:
       jdbc:
         initialize-schema: always
-#      job:
-#        name: dailyRankingJob, weeklyRankingJob, monthlyRankingJob, assetRankingJob
-#        enabled: true
+      job:
+        names: dailyRankingJob, weeklyRankingJob, monthlyRankingJob, assetRankingJob
+        enabled: true
 
   datasource:
     url: ${RANKING_DB}
