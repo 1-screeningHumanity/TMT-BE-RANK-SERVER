@@ -63,7 +63,7 @@ public class DailyWalletServiceImp implements DailyWalletService {
 
     @Override
     @Scheduled(cron = "0 50 15 ? * MON") //매주 월요일
-    public void updateMondayWon(){
+        public void updateMondayWon(){
         dailyWalletInfoQueryDslImp.updateMondayWon();
         log.info("lastMondayWon update");
     }
