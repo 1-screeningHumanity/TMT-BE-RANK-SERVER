@@ -3,8 +3,11 @@ spring:
     name: rank-server
 
   batch:
-      jdbc:
+    jdbc:
         initialize-schema: always
+    job:
+      name: dailyRankingJob, weeklyRankingJob, monthlyRankingJob, assetRankingBatchJob
+      enabled: false
 
   datasource:
     url: ${RANKING_DB}
