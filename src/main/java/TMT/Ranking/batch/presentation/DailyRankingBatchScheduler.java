@@ -22,7 +22,7 @@ public class DailyRankingBatchScheduler {
     private final PlatformTransactionManager platformTransactionManager;
     private final AssetRankingBatchJobConfig assetRankingBatchJobConfig;
 
-    @Scheduled(cron = "0 10 16 ? * MON-FRI") //일간 수익률 집계
+    @Scheduled(cron = "0 39 16 ? * MON-FRI") //일간 수익률 집계
     public void dailyRankingBatchStart()
             throws Exception{
 
