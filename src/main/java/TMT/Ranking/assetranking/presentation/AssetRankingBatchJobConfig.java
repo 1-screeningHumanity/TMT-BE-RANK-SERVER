@@ -4,7 +4,6 @@
 //import TMT.Ranking.assetranking.dto.AssetRankingDto;
 //import TMT.Ranking.assetranking.infrastructure.AssetRankingQueryDslImp;
 //import TMT.Ranking.assetranking.infrastructure.AssetRankingRepository;
-//import TMT.Ranking.batch.domain.DailyRanking;
 //import TMT.Ranking.daliywallet.domain.DailyWallet;
 //import TMT.Ranking.daliywallet.infrastructure.DailyWalletRepository;
 //import TMT.Ranking.global.common.exception.CustomException;
