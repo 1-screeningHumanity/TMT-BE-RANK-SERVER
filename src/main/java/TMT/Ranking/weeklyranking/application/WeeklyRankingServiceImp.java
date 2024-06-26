@@ -26,19 +26,19 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
 
 
     @Override //주간랭킹 정산
-    @Scheduled(cron = "0 55 16 ? * FRI")
+    @Scheduled(cron = "0 13 11 ? * MON-FRI")
     public void createWeeklyRanking(){
         weeklyRankingQueryDslImp.createWeeklyRanking();
     }
 
     @Override //주간랭킹 순위변동 정산
-    @Scheduled(cron = "0 0 17 ? * FRI")
+    @Scheduled(cron = "0 15 11 ? * MON-FRI")
     public void updateChangeWeeklyRanking(){
         weeklyRankingQueryDslImp.updateChangeWeeklyRanking();
     }
 
     @Override //주간랭킹 지난주순위 업데이트
-    @Scheduled(cron = "0 05 17 ? * FRI")
+    @Scheduled(cron = "0 14 11 ? * MON-FRI")
     public void updateLastWeekRanking(){
         weeklyRankingQueryDslImp.updateLastWeekRanking();
     }

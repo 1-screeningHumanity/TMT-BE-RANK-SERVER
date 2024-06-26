@@ -1,24 +1,23 @@
-package TMT.Ranking.monthlyranking.domain;
+package TMT.Ranking.assetranking.domain;
 
 
-import TMT.Ranking.global.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Builder;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class MonthlyRanking extends BaseEntity {
-
+public class AssetRanking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long monthlyRankingId;
+    private Long assetRankingId;
 
     private String uuid;
 
@@ -26,23 +25,21 @@ public class MonthlyRanking extends BaseEntity {
 
     private Long ranking;
 
-    private Long lastMonthRanking;
+    private Long yesterdayRanking;
+
+    private Long changeRanking;
 
     private Long won;
 
-    private double profit;
-
-    private Long changeRanking; //순위변동
-
-
     @Builder
-    public MonthlyRanking(String uuid, String nickname, Long won, double profit) {
+    public AssetRanking(String uuid, String nickname, Long ranking, Long yesterdayRanking,
+            Long changeRanking, Long won) {
         this.uuid = uuid;
         this.nickname = nickname;
+        this.ranking = ranking;
+        this.yesterdayRanking = yesterdayRanking;
+        this.changeRanking = changeRanking;
         this.won = won;
-        this.profit = profit;
     }
-
-
 
 }
