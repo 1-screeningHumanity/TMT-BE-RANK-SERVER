@@ -24,19 +24,19 @@ public class DailyRankingServiceImp implements DailyRankingService {
     private final DailyRankingRepository dailyRankingRepository;
 
     @Override
-    @Scheduled(cron = "0 10 11 ? * MON-FRI")
+    @Scheduled(cron = "0 23 11 ? * MON-FRI")
     public void createRank(){
         dailyRankingQueryDslmp.updateDailyRank();
     }
 
     @Override
-    @Scheduled(cron ="0 11 11 ? * MON-FRI")
+    @Scheduled(cron = "0 24 11 ? * MON-FRI")
     public void updateYesterdayRanking(){
         dailyRankingQueryDslmp.updateYesterdayRanking();
     }
 
     @Override
-    @Scheduled(cron = "0 12 11 ? * MON-FRI")
+    @Scheduled(cron = "0 25 11 ? * MON-FRI")
     public void updateChangeRanking(){
         dailyRankingQueryDslmp.updateChangeRanking();
     }
