@@ -3,8 +3,10 @@ spring:
     name: rank-server
 
   batch:
-      jdbc:
+    jdbc:
         initialize-schema: always
+    job:
+      enabled: false
 
   datasource:
     url: ${RANKING_DB}

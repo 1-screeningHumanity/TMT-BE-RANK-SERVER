@@ -37,7 +37,6 @@ public class DailyRankingBatchScheduler {
                 .toJobParameters());
 
     }
-
     @Scheduled(cron = "0 08 11 ? * MON-FRI") //주간 수익률 집계
     public void weeklyRankingBatchStart()
             throws Exception{
@@ -48,7 +47,6 @@ public class DailyRankingBatchScheduler {
                 .toJobParameters());
     }
 
-//    @Scheduled(cron = "0 30 16 L * *") 매월말일
     @Scheduled(cron = "0 09 11 ? * MON-FRI") //월간 수익률 집계
     public void monthlyRankingBatchStart()
             throws Exception{
