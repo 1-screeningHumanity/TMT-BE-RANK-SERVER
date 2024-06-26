@@ -5,6 +5,8 @@ import static TMT.Ranking.weeklyranking.domain.QWeeklyRanking.weeklyRanking;
 import TMT.Ranking.weeklyranking.domain.WeeklyRanking;
 import TMT.Ranking.weeklyranking.dto.WeeklyRankingDto;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -65,11 +67,16 @@ public class WeeklyRankingQueryDslImp implements WeeklyRankingQeuryDsl{
     @Transactional //주간랭킹 순위 변동 업데이트
     public void updateChangeWeeklyRanking(){
 
+        NumberExpression<Long> changeRankingExpression = Expressions.cases()//조건부설정
+                .when(weeklyRanking.lastWeekRanking.eq(0L)) //yesterday 가 0일 경우
+                .then(0L) //todayranking 반환
+                .otherwise(weeklyRanking.lastWeekRanking.subtract(weeklyRanking.ranking));
+
         jpaQueryFactory
                 .update(weeklyRanking)
-                .set(weeklyRanking.changeRanking, weeklyRanking.lastWeekRanking
-                        .subtract(weeklyRanking.ranking))
+                .set(weeklyRanking.changeRanking, changeRankingExpression)
                 .execute();
+
     }
 
     @Override

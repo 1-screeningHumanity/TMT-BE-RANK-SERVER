@@ -5,6 +5,8 @@ import static TMT.Ranking.assetranking.domain.QAssetRanking.assetRanking;
 import TMT.Ranking.assetranking.domain.AssetRanking;
 import TMT.Ranking.assetranking.dto.AssetRankingDto;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -65,12 +67,15 @@ public class AssetRankingQueryDslImp implements AssetRankingQueryDsl{
     @Transactional //자산 랭킹 변동 순위 정산
     public void updateRankingChange(){
 
+        NumberExpression<Long> changeRankingExpression = Expressions.cases()//조건부설정
+                .when(assetRanking.yesterdayRanking.eq(0L)) //yesterday 가 0일 경우
+                .then(0L) //todayranking 반환
+                .otherwise(assetRanking.yesterdayRanking.subtract(assetRanking.ranking));
+
         jpaQueryFactory
                 .update(assetRanking)
-                .set(assetRanking.changeRanking,
-                        assetRanking.yesterdayRanking.subtract(assetRanking.ranking))
+                .set(assetRanking.changeRanking, changeRankingExpression)
                 .execute();
-
     }
 
     @Override

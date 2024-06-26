@@ -24,21 +24,21 @@ public class DailyRankingServiceImp implements DailyRankingService {
     private final DailyRankingRepository dailyRankingRepository;
 
     @Override
-    @Scheduled(cron = "0 23 11 ? * MON-FRI")
+    @Scheduled(cron = "0 52 15 ? * MON-FRI")
     public void createRank(){
         dailyRankingQueryDslmp.updateDailyRank();
     }
 
     @Override
-    @Scheduled(cron = "0 24 11 ? * MON-FRI")
-    public void updateYesterdayRanking(){
-        dailyRankingQueryDslmp.updateYesterdayRanking();
+    @Scheduled(cron = "0 54 15 ? * MON-FRI")
+    public void updateChangeRanking(){
+        dailyRankingQueryDslmp.updateChangeRanking();
     }
 
     @Override
-    @Scheduled(cron = "0 25 11 ? * MON-FRI")
-    public void updateChangeRanking(){
-        dailyRankingQueryDslmp.updateChangeRanking();
+    @Scheduled(cron = "0 56 15 ? * MON-FRI")
+    public void updateYesterdayRanking(){
+        dailyRankingQueryDslmp.updateYesterdayRanking();
     }
 
     private ProfitListResponseVo maptoDto (Tuple tuple) { //tuple to dto

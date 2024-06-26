@@ -25,20 +25,20 @@ public class MonthlyRankingServiceImp implements MonthlyRankingService{
 
 
     @Override  //월간 수익률 랭킹 정산 
-    @Scheduled(cron = "0 29 11 ? * MON-FRI") //매월말일
+    @Scheduled(cron = "0 08 16 L * ?") //매월말일
     public void updateMonthlyRanking(){
         monthlyRankingQueryDslImp.monthlyRankingUpdate();
     }
 
     @Override //월간 수익률 랭킹 순위 변동 업데이트
-    @Scheduled(cron = "0 31 11 ? * MON-FRI")
+    @Scheduled(cron = "0 10 16 L * ?")
     public void updateMonthlyRankingChange(){
         monthlyRankingQueryDslImp.updateMonthlyRankingChange();
     }
 
 
     @Override
-    @Scheduled(cron = "0 30 11 ? * MON-FRI")//지난달 월간 수익률 랭킹 순위 업데이트
+    @Scheduled(cron = "0 12 16 L * ?")//지난달 월간 수익률 랭킹 순위 업데이트
     public void updateLastMonthRanking(){
         monthlyRankingQueryDslImp.updateLastMonthRanking();
     }

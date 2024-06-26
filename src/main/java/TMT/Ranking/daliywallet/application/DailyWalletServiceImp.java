@@ -22,7 +22,7 @@ public class DailyWalletServiceImp implements DailyWalletService {
 
 
     @Override
-    @Scheduled(cron = "0 00 11 ? * MON-FRI")
+    @Scheduled(cron = "0 40 15 ? * MON-FRI")
     public void walletInfoRequest() {
 
         // Feign 클라이언트를 통해, walletinfo 받아옴
@@ -47,6 +47,11 @@ public class DailyWalletServiceImp implements DailyWalletService {
                 DailyWallet dailyWalletinfo = DailyWallet.builder()
                         .uuid(uuid)
                         .todayWon(data.getWon())
+                        .yesterdayWon(data.getWon())
+                        .lastMondayWon(data.getWon())
+                        .fridayWon(data.getWon())
+                        .lastMonthWon(data.getWon())
+                        .lastMonthEndWon(data.getWon())
                         .nickname(data.getNickname())
                         .build();
                 dailyWalletInfoRepository.save(dailyWalletinfo);
@@ -56,21 +61,21 @@ public class DailyWalletServiceImp implements DailyWalletService {
         }
     }
     @Override
-    @Scheduled(cron = "0 01 11 ? * MON-FRI") //어제금액 업데이트
+    @Scheduled(cron = "0 22 16 ? * MON-FRI") //어제금액 업데이트
     public void updateYesterdayWon(){
 
         dailyWalletInfoQueryDslImp.updateYesterdayWon();
     }
 
     @Override
-    @Scheduled(cron = "0 02 11 ? * MON-FRI") //매주 월요일
+    @Scheduled(cron = "0 42 15 ? * MON") //매주 월요일
         public void updateMondayWon(){
         dailyWalletInfoQueryDslImp.updateMondayWon();
         log.info("lastMondayWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 03 11 ? * MON-FRI") //매주 금요일
+    @Scheduled(cron = "0 44 15 ? * FRI") //매주 금요일
     public void updateFridayWon(){
 
         dailyWalletInfoQueryDslImp.updateFridayWon();
@@ -78,14 +83,14 @@ public class DailyWalletServiceImp implements DailyWalletService {
     }
 
     @Override
-    @Scheduled(cron = "0 04 11 ? * MON-FRI ") //매월 1일
+    @Scheduled(cron = "0 46 15 1 * ?")//매월 1일
     public void updateLastMonthWon(){
         dailyWalletInfoQueryDslImp.updateLastMonthWon();
         log.info("lastMonthWon update");
     }
 
     @Override
-    @Scheduled(cron = "0 05 11 ? * MON-FRI")  //매월 말일
+    @Scheduled(cron = "0 48 15 L * ?") //매월 말일
     public void updateLastMonthEndWon(){
 
         dailyWalletInfoQueryDslImp.updateLastMonthEndWon();

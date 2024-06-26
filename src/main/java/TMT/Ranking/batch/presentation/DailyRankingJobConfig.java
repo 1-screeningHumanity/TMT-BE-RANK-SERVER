@@ -104,7 +104,8 @@ public class DailyRankingJobConfig {
                     DailyRanking dailyRanking = DailyRanking.builder()
                         .uuid(item.getUuid())
                         .won(item.getTodayWon())
-                        .profit(item.getProfit()).nickname(item.getNickname()).build();
+                        .profit(item.getProfit())
+                            .nickname(item.getNickname()).build();
                         dailyRankingRepository.save(dailyRanking);
                 }
             }

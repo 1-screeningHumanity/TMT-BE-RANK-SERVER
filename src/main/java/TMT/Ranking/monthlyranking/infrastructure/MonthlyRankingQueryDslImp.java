@@ -7,6 +7,8 @@ import static TMT.Ranking.monthlyranking.domain.QMonthlyRanking.monthlyRanking;
 import TMT.Ranking.monthlyranking.domain.MonthlyRanking;
 import TMT.Ranking.monthlyranking.dto.MonthlyRankingDto;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -68,11 +70,18 @@ public class MonthlyRankingQueryDslImp implements MonthlyRankingQueryDsl{
     @Transactional
     @Override
     public void updateMonthlyRankingChange(){
+
+
+        NumberExpression<Long> changeRankingExpression = Expressions.cases()//조건부설정
+                .when(monthlyRanking.lastMonthRanking.eq(0L)) //yesterday 가 0일 경우
+                .then(0L) //todayranking 반환
+                .otherwise(monthlyRanking.lastMonthRanking.subtract(monthlyRanking.ranking));
+
         jpaQueryFactory
                 .update(monthlyRanking)
-                .set(monthlyRanking.changeRanking, monthlyRanking.lastMonthRanking
-                        .subtract(monthlyRanking.ranking))
+                .set(monthlyRanking.changeRanking, changeRankingExpression)
                 .execute();
+
     }
 
     @Transactional

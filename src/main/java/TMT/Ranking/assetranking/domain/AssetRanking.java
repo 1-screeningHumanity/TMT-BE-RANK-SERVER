@@ -1,6 +1,7 @@
 package TMT.Ranking.assetranking.domain;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,7 @@ public class AssetRanking {
 
     private Long ranking;
 
+    @Column(nullable = false, columnDefinition = "bigint default 0")
     private Long yesterdayRanking;
 
     private Long changeRanking;

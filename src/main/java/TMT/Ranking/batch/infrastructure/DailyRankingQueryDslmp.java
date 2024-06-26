@@ -6,6 +6,8 @@ import TMT.Ranking.batch.domain.DailyRanking;
 import TMT.Ranking.batch.dto.DailyRankingDto;
 import TMT.Ranking.kafka.dto.NicknameChangeDto;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -87,12 +89,18 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
     @Transactional //등수 변동 업데이트
     public void updateChangeRanking(){
 
+        NumberExpression<Long> changeRankingExpression = Expressions.cases()//조건부설정
+                .when(dailyRanking.yesterdayRanking.eq(0L)) //yesterday 가 0일 경우
+                .then(0L) //todayranking 반환
+                .otherwise(dailyRanking.yesterdayRanking.subtract(dailyRanking.todayranking));
+
         jpaQueryFactory
                 .update(dailyRanking)
-                .set(dailyRanking.changeRanking,
-                        dailyRanking.yesterdayRanking.subtract(dailyRanking.todayranking))
+                .set(dailyRanking.changeRanking, changeRankingExpression)
                 .execute();
+
     }
+
 
     @Override //RankingList
     public List<Tuple> getRanking(){

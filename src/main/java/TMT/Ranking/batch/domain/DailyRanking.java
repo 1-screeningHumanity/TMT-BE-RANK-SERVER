@@ -2,6 +2,7 @@ package TMT.Ranking.batch.domain;
 
 
 import TMT.Ranking.global.entity.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class DailyRanking extends BaseEntity {
 
     private Long todayranking;
 
+    @Column(nullable = false, columnDefinition = "bigint default 0")
     private Long yesterdayRanking;
 
     private Long changeRanking;
