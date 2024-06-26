@@ -10,4 +10,6 @@ public interface DailyRankingRepository extends JpaRepository<DailyRanking, Long
 
     Optional<DailyRanking> findByUuid(String uuid);
 
+    Optional<DailyRanking> findByNickname(String nickanme);
+
 }

@@ -5,6 +5,7 @@ import static TMT.Ranking.batch.domain.QDailyRanking.dailyRanking;
 import TMT.Ranking.batch.domain.DailyRanking;
 import TMT.Ranking.batch.infrastructure.DailyRankingQueryDslmp;
 import TMT.Ranking.batch.infrastructure.DailyRankingRepository;
+import TMT.Ranking.batch.vo.MemberDailyRankingResponseVo;
 import TMT.Ranking.batch.vo.MyProfitResponseVo;
 import TMT.Ranking.batch.vo.ProfitListResponseVo;
 import TMT.Ranking.global.common.exception.CustomException;
@@ -72,6 +73,17 @@ public class DailyRankingServiceImp implements DailyRankingService {
         return new MyProfitResponseVo(dailyRanking.get().getNickname(),
                 dailyRanking.get().getTodayranking(),dailyRanking.get().getChangeRanking()
                 ,dailyRanking.get().getProfit());
+    }
+
+    @Override
+    public MemberDailyRankingResponseVo getMemberDailyRanking(String nickname){
+
+        Optional<DailyRanking> dailyRanking = dailyRankingRepository.findByNickname(nickname);
+        if(dailyRanking.isEmpty()) {
+            throw new CustomException(BaseResponseCode.WRONG_NICKNAME);
+        }
+        return new MemberDailyRankingResponseVo(dailyRanking.get().getNickname(),
+                dailyRanking.get().getTodayranking());
     }
 
 }

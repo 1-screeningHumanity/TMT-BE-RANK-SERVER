@@ -1,5 +1,6 @@
 package TMT.Ranking.batch.application;
 
+import TMT.Ranking.batch.vo.MemberDailyRankingResponseVo;
 import TMT.Ranking.batch.vo.MyProfitResponseVo;
 import TMT.Ranking.batch.vo.ProfitListResponseVo;
 import java.util.List;
@@ -17,4 +18,5 @@ public interface DailyRankingService {
 
     MyProfitResponseVo getMyProfit(String uuid);
 
+    MemberDailyRankingResponseVo getMemberDailyRanking(String nickname);
 }
