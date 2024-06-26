@@ -33,6 +33,7 @@ public enum BaseResponseCode {
     EMPTY_YESTERDAYWALLET(HttpStatus.BAD_REQUEST, false, 3002, "어제 지갑정보가 존재하지않습니다."),
     NO_DATA(HttpStatus.BAD_REQUEST, false, 3003, "지갑 정보가 비어있음."),
     INCORRECT_UUID(HttpStatus.BAD_REQUEST, false, 3004, "UUID가 존재하지 않음."),
+    WRONG_NICKNAME(HttpStatus.BAD_REQUEST, false, 3005, "존재하지 않는 닉네임."),
     
 
     //공통 에러. 9000 ~ 9999
