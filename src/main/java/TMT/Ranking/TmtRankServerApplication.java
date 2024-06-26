@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients
 @EnableJpaAuditing
 @EnableScheduling
+@EnableBatchProcessing
 public class TmtRankServerApplication {
 
 	public static void main(String[] args) {

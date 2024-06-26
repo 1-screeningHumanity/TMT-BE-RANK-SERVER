@@ -26,7 +26,7 @@ public class DailyRankingBatchScheduler {
     private final WeeklyRankingJobConfig weeklyRankingJobConfig;
     private final MonthlyRankingJobConfig monthlyRankingBatchConfig;
 
-    @Scheduled(cron = "0 45 19 ? * MON-FRI") //일간 수익률 집계
+    @Scheduled(cron = "0 07 11 ? * MON-FRI") //일간 수익률 집계
     public void dailyRankingBatchStart()
             throws Exception{
 
@@ -38,7 +38,7 @@ public class DailyRankingBatchScheduler {
 
     }
 
-    @Scheduled(cron = "0 30 17 ? * FRI") //주간 수익률 집계
+    @Scheduled(cron = "0 08 11 ? * MON-FRI") //주간 수익률 집계
     public void weeklyRankingBatchStart()
             throws Exception{
 
@@ -49,7 +49,7 @@ public class DailyRankingBatchScheduler {
     }
 
 //    @Scheduled(cron = "0 30 16 L * *") 매월말일
-    @Scheduled(cron = "0 35 15 ? * FRI") //월간 수익률 집계
+    @Scheduled(cron = "0 09 11 ? * MON-FRI") //월간 수익률 집계
     public void monthlyRankingBatchStart()
             throws Exception{
 
@@ -61,7 +61,7 @@ public class DailyRankingBatchScheduler {
         log.info("start monthlyRankingBatch");
     }
 
-    @Scheduled(cron = "0 15 17 ? * MON-FRI") //자산집계
+    @Scheduled(cron = "0 19 11 ? * MON-FRI") //자산집계
     public void assetRankingBatchStart()
             throws Exception{
 
