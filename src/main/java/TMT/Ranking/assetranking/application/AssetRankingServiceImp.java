@@ -78,9 +78,8 @@ public class AssetRankingServiceImp implements AssetRankingService {
 
         return new MyAssetRankingResponseVo(assetRanking.get().getNickname(),
                 assetRanking.get().getWon(),
-                assetRanking.get().getRanking(),
-                assetRanking.get().getChangeRanking());
-
+                assetRanking.get().getChangeRanking(),
+                assetRanking.get().getRanking());
     }
 
 }
