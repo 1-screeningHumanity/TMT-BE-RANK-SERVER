@@ -4,6 +4,7 @@ package TMT.Ranking.monthlyranking.domain;
 import TMT.Ranking.global.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class MonthlyRanking extends BaseEntity {
 
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long monthlyRankingId;
 
     private String uuid;

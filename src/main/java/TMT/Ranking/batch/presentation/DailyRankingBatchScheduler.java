@@ -1,6 +1,8 @@
 package TMT.Ranking.batch.presentation;
 
 import TMT.Ranking.assetranking.presentation.AssetRankingBatchJobConfig;
+import TMT.Ranking.monthlyranking.presentation.MonthlyRankingJobConfig;
+import TMT.Ranking.weeklyranking.presentation.WeeklyRankingJobConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -21,11 +23,14 @@ public class DailyRankingBatchScheduler {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
     private final AssetRankingBatchJobConfig assetRankingBatchJobConfig;
+    private final WeeklyRankingJobConfig weeklyRankingJobConfig;
+    private final MonthlyRankingJobConfig monthlyRankingBatchConfig;
 
-    @Scheduled(cron = "0 10 16 ? * MON-FRI") //일간 수익률 집계
+    @Scheduled(cron = "0 07 11 ? * MON-FRI") //일간 수익률 집계
     public void dailyRankingBatchStart()
             throws Exception{
 
+        log.info("start dailyRankingBatch");
         jobLauncher.run((Job) dailyRankingJobConfig.dailyRankingJob(
                 jobRepository,platformTransactionManager), new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
@@ -33,22 +38,22 @@ public class DailyRankingBatchScheduler {
 
     }
 
-    @Scheduled(cron = "0 30 17 ? * FRI") //주간 수익률 집계
+    @Scheduled(cron = "0 08 11 ? * MON-FRI") //주간 수익률 집계
     public void weeklyRankingBatchStart()
             throws Exception{
 
-        jobLauncher.run((Job) dailyRankingJobConfig.weeklyRanking(
+        jobLauncher.run((Job) weeklyRankingJobConfig.weeklyRanking(
                 jobRepository,platformTransactionManager), new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
                 .toJobParameters());
     }
 
 //    @Scheduled(cron = "0 30 16 L * *") 매월말일
-    @Scheduled(cron = "0 35 15 ? * FRI") //월간 수익률 집계
+    @Scheduled(cron = "0 09 11 ? * MON-FRI") //월간 수익률 집계
     public void monthlyRankingBatchStart()
             throws Exception{
 
-        jobLauncher.run((Job) dailyRankingJobConfig.monthlyRanking(
+        jobLauncher.run((Job) monthlyRankingBatchConfig.monthlyRanking(
                 jobRepository,platformTransactionManager), new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
                 .toJobParameters());
@@ -56,7 +61,7 @@ public class DailyRankingBatchScheduler {
         log.info("start monthlyRankingBatch");
     }
 
-    @Scheduled(cron = "0 15 17 ? * MON-FRI") //자산집계
+    @Scheduled(cron = "0 19 11 ? * MON-FRI") //자산집계
     public void assetRankingBatchStart()
             throws Exception{
 
