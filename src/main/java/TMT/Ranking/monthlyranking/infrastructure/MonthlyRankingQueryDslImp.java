@@ -10,8 +10,10 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,14 +97,23 @@ public class MonthlyRankingQueryDslImp implements MonthlyRankingQueryDsl{
     }
 
     @Override
-    public List<Tuple> getMonthlyRanking(){
+    public List<Tuple> getMonthlyRanking(Pageable pageable){
 
         return jpaQueryFactory
                 .select(monthlyRanking.ranking,monthlyRanking.nickname,
                         monthlyRanking.profit,monthlyRanking.changeRanking)
                 .from(monthlyRanking)
                 .orderBy(monthlyRanking.profit.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    @Override
+    public long getMonthlyRankingCount(){
+        return jpaQueryFactory
+                .selectFrom(monthlyRanking)
+                .fetchCount();
     }
 
 }
