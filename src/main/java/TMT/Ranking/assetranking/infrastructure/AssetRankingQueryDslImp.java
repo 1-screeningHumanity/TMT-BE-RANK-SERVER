@@ -89,17 +89,6 @@ public class AssetRankingQueryDslImp implements AssetRankingQueryDsl{
                 .execute();
     }
 
-//    @Override
-//    public List<Tuple> getAssetRanking(){
-//
-//        return jpaQueryFactory
-//                .select(assetRanking.nickname, assetRanking.ranking,
-//                        assetRanking.won, assetRanking.changeRanking)
-//                .from(assetRanking)
-//                .orderBy(assetRanking.won.desc())
-//                .fetch();
-//    }
-//
     @Override
     public List<Tuple> getAssetRanking(Pageable pageable) {
         return jpaQueryFactory

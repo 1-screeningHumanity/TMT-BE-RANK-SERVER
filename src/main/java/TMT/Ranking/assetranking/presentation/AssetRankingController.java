@@ -24,7 +24,7 @@ public class AssetRankingController {
     @GetMapping("/asset") //랭킹 정보 return
     public BaseResponse<Page<AssetRankingResponseVo>> getProfit(Pageable pageable){
 
-        org.springframework.data.domain.Page<AssetRankingResponseVo> assetRankingResponseVo =
+       Page<AssetRankingResponseVo> assetRankingResponseVo =
                 assetRankingServiceImp.getAssetRanking(pageable);
         return new BaseResponse<>(assetRankingResponseVo);
 
