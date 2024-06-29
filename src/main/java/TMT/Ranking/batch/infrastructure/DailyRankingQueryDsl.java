@@ -4,6 +4,7 @@ import TMT.Ranking.batch.dto.DailyRankingDto;
 import TMT.Ranking.kafka.dto.NicknameChangeDto;
 import com.querydsl.core.Tuple;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -20,6 +21,7 @@ public interface DailyRankingQueryDsl {
 
     void updateChangeRanking();
 
-    List<Tuple> getRanking();
+    List<Tuple> getRanking(Pageable pageable);
 
+    long getDailyRankingCount();
 }

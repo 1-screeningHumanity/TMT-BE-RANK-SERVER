@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,17 +102,25 @@ public class DailyRankingQueryDslmp implements DailyRankingQueryDsl {
 
     }
 
-
     @Override //RankingList
-    public List<Tuple> getRanking(){
+    public List<Tuple> getRanking(Pageable pageable){
 
         return jpaQueryFactory
                 .select(dailyRanking.profit, dailyRanking.nickname,
                         dailyRanking.todayranking, dailyRanking.changeRanking)
                 .from(dailyRanking)
                 .orderBy(dailyRanking.profit.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
+    }
+
+    @Override
+    public long getDailyRankingCount() {
+        return jpaQueryFactory
+                .selectFrom(dailyRanking)
+                .fetchCount();  // 전체 레코드 수를 계산
     }
 
 }

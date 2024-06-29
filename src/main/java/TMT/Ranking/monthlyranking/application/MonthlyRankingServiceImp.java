@@ -12,7 +12,11 @@ import TMT.Ranking.monthlyranking.vo.MonthlyRankingResponseVo;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -55,13 +59,13 @@ public class MonthlyRankingServiceImp implements MonthlyRankingService{
     }
 
     @Override //월간수익률 랭킹 순위 return
-    public List<MonthlyRankingResponseVo> getMonthlyRanking(){
+    public Page<MonthlyRankingResponseVo> getMonthlyRanking(Pageable pageable){
 
-        List<Tuple> tuples = monthlyRankingQueryDslImp.getMonthlyRanking();
-        List<MonthlyRankingResponseVo> monthlyRankingResponseVo = tuples.stream()
-                .map(this::maptoDto)
-                .toList();
-        return monthlyRankingResponseVo;
+        List<Tuple> tuples = monthlyRankingQueryDslImp.getMonthlyRanking(pageable);
+        long total = monthlyRankingQueryDslImp.getMonthlyRankingCount();
+        List<MonthlyRankingResponseVo> monthlyRankingResponseVoList = tuples.stream()
+                .map(this::maptoDto).collect(Collectors.toList());
+        return new PageImpl<>(monthlyRankingResponseVoList, pageable, total);
 
     }
 

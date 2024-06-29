@@ -1,5 +1,6 @@
 package TMT.Ranking.weeklyranking.infrastructure;
 
+
 import static TMT.Ranking.weeklyranking.domain.QWeeklyRanking.weeklyRanking;
 
 import TMT.Ranking.weeklyranking.domain.WeeklyRanking;
@@ -8,8 +9,10 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,18 +91,25 @@ public class WeeklyRankingQueryDslImp implements WeeklyRankingQeuryDsl{
                 .execute();
     }
 
-    @Override
-    public List<Tuple> getWeeklyRanking(){
+    @Override //주간랭킹 순위 조회
+    public List<Tuple> getWeeklyRanking(Pageable pageable){
+
         return jpaQueryFactory
                 .select(weeklyRanking.changeRanking,weeklyRanking.won,
                         weeklyRanking.profit, weeklyRanking.nickname, weeklyRanking.ranking)
                 .from(weeklyRanking)
                 .orderBy(weeklyRanking.profit.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
+    @Override
+    public long getWeeklyRankingCount(){
 
-
-
+        return jpaQueryFactory
+                .selectFrom(weeklyRanking)
+                .fetchCount();
+    }
 
 }

@@ -6,8 +6,9 @@ import TMT.Ranking.global.common.token.DecodingToken;
 import TMT.Ranking.monthlyranking.application.MonthlyRankingServiceImp;
 import TMT.Ranking.monthlyranking.vo.MonthlyMyRankingResponseVo;
 import TMT.Ranking.monthlyranking.vo.MonthlyRankingResponseVo;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +22,10 @@ public class MonthlyRankingController {
 
 
     @GetMapping("/monthly/revenue")
-    public BaseResponse<List<MonthlyRankingResponseVo>> getMonthlyRanking(){
+    public BaseResponse<Page<MonthlyRankingResponseVo>> getMonthlyRanking(Pageable pageable){
 
-        List<MonthlyRankingResponseVo> monthlyRankingResponseVo =
-                monthlyRankingServiceImp.getMonthlyRanking();
+        Page<MonthlyRankingResponseVo> monthlyRankingResponseVo =
+                monthlyRankingServiceImp.getMonthlyRanking(pageable);
 
         return new BaseResponse<>(monthlyRankingResponseVo);
 
