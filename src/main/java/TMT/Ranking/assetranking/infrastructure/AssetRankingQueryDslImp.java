@@ -10,6 +10,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,14 +89,34 @@ public class AssetRankingQueryDslImp implements AssetRankingQueryDsl{
                 .execute();
     }
 
+//    @Override
+//    public List<Tuple> getAssetRanking(){
+//
+//        return jpaQueryFactory
+//                .select(assetRanking.nickname, assetRanking.ranking,
+//                        assetRanking.won, assetRanking.changeRanking)
+//                .from(assetRanking)
+//                .orderBy(assetRanking.won.desc())
+//                .fetch();
+//    }
+//
     @Override
-    public List<Tuple> getAssetRanking(){
-
+    public List<Tuple> getAssetRanking(Pageable pageable) {
         return jpaQueryFactory
                 .select(assetRanking.nickname, assetRanking.ranking,
                         assetRanking.won, assetRanking.changeRanking)
                 .from(assetRanking)
                 .orderBy(assetRanking.won.desc())
+                .offset(pageable.getOffset())  // 페이징 처리: 시작 지점
+                .limit(pageable.getPageSize()) // 페이징 처리: 페이지 크기
                 .fetch();
     }
+
+    @Override
+    public long getAssetRankingCount() {
+        return jpaQueryFactory
+                .selectFrom(assetRanking)
+                .fetchCount();  // 전체 레코드 수를 계산
+    }
+
 }

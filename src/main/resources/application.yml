@@ -15,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -23,7 +23,7 @@ spring:
 
 
 server:
-  port: 0
+  port: 8084
 
 eureka:
   instance:

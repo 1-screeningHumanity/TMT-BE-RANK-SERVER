@@ -13,8 +13,12 @@ import TMT.Ranking.global.common.response.BaseResponseCode;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -47,25 +51,23 @@ public class AssetRankingServiceImp implements AssetRankingService {
         assetRankingQueryDslImp.updateYesterdayRanking();
     }
 
-    private AssetRankingResponseVo maptoDto (Tuple tuple) { //tuple to dto
+    @Override // 자산순위 반환
+    public Page<AssetRankingResponseVo> getAssetRanking(Pageable pageable) {
+        List<Tuple> tuples = assetRankingQueryDslImp.getAssetRanking(pageable);
+        long total = assetRankingQueryDslImp.getAssetRankingCount(); // 전체 레코드 수
+        List<AssetRankingResponseVo> assetRankingResponseVoList = tuples.stream()
+                .map(this::maptoDto)
+                .collect(Collectors.toList());
 
+        return new PageImpl<>(assetRankingResponseVoList, pageable, total);
+    }
+
+    private AssetRankingResponseVo maptoDto(Tuple tuple) { // Tuple -> AssetRankingResponseVo
         Long won  = tuple.get(assetRanking.won);
         String nickname = tuple.get(assetRanking.nickname);
         Long todayRanking = tuple.get(assetRanking.ranking);
         Long changeRanking = tuple.get(assetRanking.changeRanking);
-        return new AssetRankingResponseVo(nickname, todayRanking, won,changeRanking);
-
-    }
-
-
-    @Override //자산순위return
-    public List<AssetRankingResponseVo> getAssetRanking(){
-
-        List<Tuple> tuples = assetRankingQueryDslImp.getAssetRanking();
-        List<AssetRankingResponseVo> assetRankingResponseVo = tuples.stream()
-                .map(this::maptoDto).toList();
-
-        return assetRankingResponseVo;
+        return new AssetRankingResponseVo(nickname, todayRanking, won, changeRanking);
     }
 
     @Override //내 자산랭킹정보 return
