@@ -8,6 +8,8 @@ import TMT.Ranking.weeklyranking.vo.WeeklyMyRankingResponseVo;
 import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +22,10 @@ public class WeeklyRankingController {
     private final DecodingToken decodingToken;
 
     @GetMapping("/weekly/revenue")
-    public BaseResponse<List<WeeklyRankingResponseVo>> getWeeklyRanking(){
+    public BaseResponse<Page<WeeklyRankingResponseVo>> getWeeklyRanking(Pageable pageable){
 
-        List<WeeklyRankingResponseVo> weeklyRankingResponseVo =
-                weeklyRankingServiceImp.getWeeklyRanking();
+        Page<WeeklyRankingResponseVo> weeklyRankingResponseVo =
+                weeklyRankingServiceImp.getWeeklyRanking(pageable);
         return new BaseResponse<>(weeklyRankingResponseVo);
 
     }

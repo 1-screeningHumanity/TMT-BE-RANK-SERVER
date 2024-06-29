@@ -6,8 +6,9 @@ import TMT.Ranking.assetranking.vo.AssetRankingResponseVo;
 import TMT.Ranking.assetranking.vo.MyAssetRankingResponseVo;
 import TMT.Ranking.global.common.response.BaseResponse;
 import TMT.Ranking.global.common.token.DecodingToken;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +22,10 @@ public class AssetRankingController {
 
 
     @GetMapping("/asset") //랭킹 정보 return
-    public BaseResponse<List<AssetRankingResponseVo>> getProfit(){
+    public BaseResponse<Page<AssetRankingResponseVo>> getProfit(Pageable pageable){
 
-        List<AssetRankingResponseVo> assetRankingResponseVo =
-                assetRankingServiceImp.getAssetRanking();
+       Page<AssetRankingResponseVo> assetRankingResponseVo =
+                assetRankingServiceImp.getAssetRanking(pageable);
         return new BaseResponse<>(assetRankingResponseVo);
 
     }

@@ -2,6 +2,7 @@ package TMT.Ranking.batch.application;
 
 import static TMT.Ranking.batch.domain.QDailyRanking.dailyRanking;
 
+import TMT.Ranking.assetranking.vo.AssetRankingResponseVo;
 import TMT.Ranking.batch.domain.DailyRanking;
 import TMT.Ranking.batch.infrastructure.DailyRankingQueryDslmp;
 import TMT.Ranking.batch.infrastructure.DailyRankingRepository;
@@ -13,7 +14,11 @@ import TMT.Ranking.global.common.response.BaseResponseCode;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +47,7 @@ public class DailyRankingServiceImp implements DailyRankingService {
         dailyRankingQueryDslmp.updateYesterdayRanking();
     }
 
-    private ProfitListResponseVo maptoDto (Tuple tuple) { //tuple to dto
+    private ProfitListResponseVo maptoDto (Tuple tuple) { //tuple to ProfitListResponseVo
 
         double profit  = tuple.get(dailyRanking.profit);
         String nickname = tuple.get(dailyRanking.nickname);
@@ -53,16 +58,17 @@ public class DailyRankingServiceImp implements DailyRankingService {
     }
 
     @Override  //일일 랭킹 return
-    public List<ProfitListResponseVo> getProfit(){
+    public Page<ProfitListResponseVo> getProfit(Pageable pageable){
 
-        List<Tuple> tuples = dailyRankingQueryDslmp.getRanking();
-        List<ProfitListResponseVo> profitListResponseVo = tuples.stream()
-                .map(this::maptoDto).toList();
-        return profitListResponseVo;
+        List<Tuple> tuples = dailyRankingQueryDslmp.getRanking(pageable);
+        long total = dailyRankingQueryDslmp.getDailyRankingCount();
+        List<ProfitListResponseVo> profitListResponseVoList = tuples.stream()
+                .map(this::maptoDto).collect(Collectors.toList());
+        return new PageImpl<>(profitListResponseVoList, pageable, total);
 
     }
 
-    @Override
+    @Override //내 일일랭킹 return
     public MyProfitResponseVo getMyProfit(String uuid){
 
         Optional<DailyRanking> dailyRanking = dailyRankingRepository.findByUuid(uuid);

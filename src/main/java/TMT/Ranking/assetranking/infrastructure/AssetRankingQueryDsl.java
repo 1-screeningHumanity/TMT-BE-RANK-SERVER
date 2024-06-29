@@ -3,7 +3,7 @@ package TMT.Ranking.assetranking.infrastructure;
 import TMT.Ranking.assetranking.dto.AssetRankingDto;
 import com.querydsl.core.Tuple;
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
 
 public interface AssetRankingQueryDsl {
 
@@ -11,11 +11,12 @@ public interface AssetRankingQueryDsl {
 
     void updateRanking();
 
-    @Transactional
     void updateRankingChange();
 
-    @Transactional
     void updateYesterdayRanking();
 
-    List<Tuple> getAssetRanking();
+    List<Tuple> getAssetRanking(Pageable pageable);
+
+    long getAssetRankingCount();
+
 }

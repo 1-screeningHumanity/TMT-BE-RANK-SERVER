@@ -2,8 +2,8 @@ package TMT.Ranking.assetranking.application;
 
 import TMT.Ranking.assetranking.vo.AssetRankingResponseVo;
 import TMT.Ranking.assetranking.vo.MyAssetRankingResponseVo;
-import java.util.List;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AssetRankingService {
 
@@ -13,7 +13,10 @@ public interface AssetRankingService {
 
     void updateYesterdayRanking();
 
-    List<AssetRankingResponseVo> getAssetRanking();
+//    List<AssetRankingResponseVo> getAssetRanking();
+
+    // 자산순위 반환
+    Page<AssetRankingResponseVo> getAssetRanking(Pageable pageable);
 
     MyAssetRankingResponseVo getMyAssetRanking(String uuid);
 
