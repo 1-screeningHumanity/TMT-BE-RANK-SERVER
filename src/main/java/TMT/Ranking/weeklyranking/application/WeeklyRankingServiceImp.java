@@ -13,7 +13,11 @@ import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +47,7 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
         weeklyRankingQueryDslImp.updateLastWeekRanking();
     }
 
-    private WeeklyRankingResponseVo maptoDto (Tuple tuple) { //tuple to dto
+    private WeeklyRankingResponseVo maptoDto (Tuple tuple) { //tuple to WeeklyRankingResponseVo
 
         double profit  = tuple.get(weeklyRanking.profit);
         String nickname = tuple.get(weeklyRanking.nickname);
@@ -53,13 +57,15 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
 
     }
 
-    @Override //주간랭킹 조회 리스트
-    public List<WeeklyRankingResponseVo> getWeeklyRanking(){
+    @Override //주간랭킹 조회
+    public Page<WeeklyRankingResponseVo> getWeeklyRanking(Pageable pageable){
 
-        List<Tuple> tuples = weeklyRankingQueryDslImp.getWeeklyRanking();
-        List<WeeklyRankingResponseVo> weeklyRankingResponseVo = tuples.stream()
-                .map(this::maptoDto).toList();
-        return weeklyRankingResponseVo;
+        List<Tuple> tuples = weeklyRankingQueryDslImp.getWeeklyRanking(pageable);
+        long total = weeklyRankingQueryDslImp.getWeeklyRankingCount();
+        List<WeeklyRankingResponseVo> weeklyRankingResponseVoList = tuples.stream()
+                .map(this::maptoDto).collect(Collectors.toList());
+
+        return new PageImpl<>(weeklyRankingResponseVoList, pageable, total);
     }
 
     @Override
