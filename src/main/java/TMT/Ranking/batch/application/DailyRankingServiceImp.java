@@ -89,7 +89,8 @@ public class DailyRankingServiceImp implements DailyRankingService {
             throw new CustomException(BaseResponseCode.WRONG_NICKNAME);
         }
         return new MemberDailyRankingResponseVo(dailyRanking.get().getNickname(),
-                dailyRanking.get().getTodayranking());
+                dailyRanking.get().getTodayranking(),dailyRanking.get().getWon()
+                ,dailyRanking.get().getProfit());
     }
 
 }

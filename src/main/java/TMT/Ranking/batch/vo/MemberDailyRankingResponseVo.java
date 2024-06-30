@@ -9,5 +9,7 @@ public class MemberDailyRankingResponseVo {
 
     private String nickname;
     private Long todayRanking;
+    private Long won;
+    private double profit;
 
 }
