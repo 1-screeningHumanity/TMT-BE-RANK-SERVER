@@ -13,6 +13,7 @@ import TMT.Ranking.weeklyranking.vo.WeeklyRankingResponseVo;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -47,13 +48,13 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
         weeklyRankingQueryDslImp.updateLastWeekRanking();
     }
 
-    private WeeklyRankingResponseVo maptoDto (Tuple tuple) { //tuple to WeeklyRankingResponseVo
+    private WeeklyRankingResponseVo maptoDto (Tuple tuple, Long id) { //tuple to WeeklyRankingResponseVo
 
         double profit  = tuple.get(weeklyRanking.profit);
         String nickname = tuple.get(weeklyRanking.nickname);
         Long ranking = tuple.get(weeklyRanking.ranking);
         Long changeRanking = tuple.get(weeklyRanking.changeRanking);
-        return new WeeklyRankingResponseVo(nickname, profit, ranking, changeRanking);
+        return new WeeklyRankingResponseVo(nickname, profit, ranking, changeRanking, id);
 
     }
 
@@ -62,8 +63,11 @@ public class WeeklyRankingServiceImp implements WeeklyRankingService{
 
         List<Tuple> tuples = weeklyRankingQueryDslImp.getWeeklyRanking(pageable);
         long total = weeklyRankingQueryDslImp.getWeeklyRankingCount();
+
+        AtomicLong atomicLong = new AtomicLong(1L);
+
         List<WeeklyRankingResponseVo> weeklyRankingResponseVoList = tuples.stream()
-                .map(this::maptoDto).collect(Collectors.toList());
+                .map((Tuple tuple) -> maptoDto(tuple, atomicLong.getAndIncrement())).collect(Collectors.toList());
 
         return new PageImpl<>(weeklyRankingResponseVoList, pageable, total);
     }

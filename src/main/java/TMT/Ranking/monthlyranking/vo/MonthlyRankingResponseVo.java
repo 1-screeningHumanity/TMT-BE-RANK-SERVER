@@ -13,4 +13,5 @@ public class MonthlyRankingResponseVo {
     private Long ranking;
     private Long changeRanking;
 
+    private Long id;
 }

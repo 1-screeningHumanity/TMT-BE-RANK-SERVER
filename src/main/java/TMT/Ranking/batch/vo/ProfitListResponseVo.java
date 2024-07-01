@@ -11,5 +11,5 @@ public class ProfitListResponseVo {
     private String nickname;
     private Long todayRanking;
     private Long changeRanking;
-
+    private Long id;
 }

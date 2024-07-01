@@ -14,6 +14,7 @@ import TMT.Ranking.global.common.response.BaseResponseCode;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -47,13 +48,13 @@ public class DailyRankingServiceImp implements DailyRankingService {
         dailyRankingQueryDslmp.updateYesterdayRanking();
     }
 
-    private ProfitListResponseVo maptoDto (Tuple tuple) { //tuple to ProfitListResponseVo
+    private ProfitListResponseVo maptoDto (Tuple tuple, Long id) { //tuple to ProfitListResponseVo
 
         double profit  = tuple.get(dailyRanking.profit);
         String nickname = tuple.get(dailyRanking.nickname);
         Long todayRanking = tuple.get(dailyRanking.todayranking);
         Long changeRanking = tuple.get(dailyRanking.changeRanking);
-        return new ProfitListResponseVo(profit, nickname, todayRanking, changeRanking);
+        return new ProfitListResponseVo(profit, nickname, todayRanking, changeRanking, id);
 
     }
 
@@ -62,8 +63,11 @@ public class DailyRankingServiceImp implements DailyRankingService {
 
         List<Tuple> tuples = dailyRankingQueryDslmp.getRanking(pageable);
         long total = dailyRankingQueryDslmp.getDailyRankingCount();
+
+        AtomicLong atomicLong = new AtomicLong(1L);
+
         List<ProfitListResponseVo> profitListResponseVoList = tuples.stream()
-                .map(this::maptoDto).collect(Collectors.toList());
+                .map((Tuple tuple) -> maptoDto(tuple, atomicLong.getAndIncrement())).collect(Collectors.toList());
         return new PageImpl<>(profitListResponseVoList, pageable, total);
 
     }

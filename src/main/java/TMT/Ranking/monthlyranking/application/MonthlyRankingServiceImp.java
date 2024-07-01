@@ -12,6 +12,7 @@ import TMT.Ranking.monthlyranking.vo.MonthlyRankingResponseVo;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,13 +49,13 @@ public class MonthlyRankingServiceImp implements MonthlyRankingService{
     }
 
 
-    private MonthlyRankingResponseVo maptoDto (Tuple tuple) { //tuple to dto
+    private MonthlyRankingResponseVo maptoDto (Tuple tuple, Long id) { //tuple to dto
 
         double profit  = tuple.get(monthlyRanking.profit);
         String nickname = tuple.get(monthlyRanking.nickname);
         Long ranking = tuple.get(monthlyRanking.ranking);
         Long changeRanking = tuple.get(monthlyRanking.changeRanking);
-        return new MonthlyRankingResponseVo(profit, nickname,ranking,changeRanking);
+        return new MonthlyRankingResponseVo(profit, nickname,ranking,changeRanking, id);
 
     }
 
@@ -63,8 +64,10 @@ public class MonthlyRankingServiceImp implements MonthlyRankingService{
 
         List<Tuple> tuples = monthlyRankingQueryDslImp.getMonthlyRanking(pageable);
         long total = monthlyRankingQueryDslImp.getMonthlyRankingCount();
+        AtomicLong atomicLong = new AtomicLong(1L);
+
         List<MonthlyRankingResponseVo> monthlyRankingResponseVoList = tuples.stream()
-                .map(this::maptoDto).collect(Collectors.toList());
+                .map((Tuple tuple) -> maptoDto(tuple, atomicLong.getAndIncrement())).collect(Collectors.toList());
         return new PageImpl<>(monthlyRankingResponseVoList, pageable, total);
 
     }
