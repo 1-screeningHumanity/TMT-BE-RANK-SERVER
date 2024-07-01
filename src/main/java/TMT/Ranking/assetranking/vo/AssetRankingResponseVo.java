@@ -11,6 +11,6 @@ public class AssetRankingResponseVo {
     private Long ranking;
     private Long won;
     private Long changeRanking;
-
+    private Long id;
 
 }

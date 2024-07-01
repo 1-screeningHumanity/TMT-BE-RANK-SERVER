@@ -13,6 +13,7 @@ import TMT.Ranking.global.common.response.BaseResponseCode;
 import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,19 +56,23 @@ public class AssetRankingServiceImp implements AssetRankingService {
     public Page<AssetRankingResponseVo> getAssetRanking(Pageable pageable) {
         List<Tuple> tuples = assetRankingQueryDslImp.getAssetRanking(pageable);
         long total = assetRankingQueryDslImp.getAssetRankingCount(); // 전체 레코드 수
+
+        AtomicLong atomicLong = new AtomicLong(1L);
+
         List<AssetRankingResponseVo> assetRankingResponseVoList = tuples.stream()
-                .map(this::maptoDto)
+                .map((Tuple tuple) -> maptoDto(tuple, atomicLong.getAndIncrement()))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(assetRankingResponseVoList, pageable, total);
     }
 
-    private AssetRankingResponseVo maptoDto(Tuple tuple) { // Tuple -> AssetRankingResponseVo
+    private AssetRankingResponseVo maptoDto(Tuple tuple, Long id) { // Tuple -> AssetRankingResponseVo
         Long won  = tuple.get(assetRanking.won);
         String nickname = tuple.get(assetRanking.nickname);
         Long todayRanking = tuple.get(assetRanking.ranking);
         Long changeRanking = tuple.get(assetRanking.changeRanking);
-        return new AssetRankingResponseVo(nickname, todayRanking, won, changeRanking);
+
+        return new AssetRankingResponseVo(nickname, todayRanking, won, changeRanking, id);
     }
 
     @Override //내 자산랭킹정보 return
