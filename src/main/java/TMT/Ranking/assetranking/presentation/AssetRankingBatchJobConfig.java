@@ -57,6 +57,11 @@ public class AssetRankingBatchJobConfig {
                 .reader(assetRankingItemReader())
                 .processor(assetRankingProcessor())
                 .writer(assetRankingWriter())
+                .faultTolerant()
+                .skip(Exception.class)
+                .skipLimit(100)
+                .retry(Exception.class)
+                .retryLimit(100)
                 .build();
     }
 
