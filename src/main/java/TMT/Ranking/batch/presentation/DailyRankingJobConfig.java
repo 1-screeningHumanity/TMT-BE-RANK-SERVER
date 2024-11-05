@@ -1,5 +1,6 @@
 package TMT.Ranking.batch.presentation;
 
+import TMT.Ranking.assetranking.presentation.CustomSkipListner;
 import TMT.Ranking.batch.domain.DailyRanking;
 import TMT.Ranking.batch.dto.DailyRankingDto;
 import TMT.Ranking.batch.infrastructure.DailyRankingQueryDslmp;
@@ -22,6 +23,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
@@ -35,6 +37,10 @@ public class DailyRankingJobConfig {
     private final DailyWalletRepository dailyWalletRepository;
     private final DailyRankingRepository dailyRankingRepository;
     private final DailyRankingQueryDslmp dailyRankingQueryDslmp;
+
+
+    @Autowired
+    private CustomSkipListner customSkipListner;
 
     @Bean //일일랭킹 집계
     public Job dailyRankingJob(JobRepository jobRepository,
@@ -55,8 +61,14 @@ public class DailyRankingJobConfig {
                 .reader(dailyRankingReader())
                 .processor(dailyRankingProcessor())
                 .writer(dailyRankingWriter())
+                .faultTolerant()
+                .skip(Exception.class)
+                .skipLimit(100)
+                .listener(customSkipListner)
+                .retry(Exception.class)
+                .retryLimit(3)
+                .listener(customSkipListner)
                 .build();
-
     }
 
     @Bean
