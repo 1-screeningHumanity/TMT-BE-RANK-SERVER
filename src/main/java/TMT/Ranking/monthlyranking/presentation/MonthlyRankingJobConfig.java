@@ -66,7 +66,6 @@ public class MonthlyRankingJobConfig {
                 .faultTolerant()
                 .skip(Exception.class)
                 .skipLimit(100)
-                .listener(customSkipListner)
                 .retry(Exception.class)
                 .retryLimit(3)
                 .listener(customSkipListner)

@@ -67,7 +67,7 @@ public class WeeklyRankingJobConfig {
                 .retry(Exception.class)
                 .retryLimit(3)
                 .listener(customSkipListner)
-                .build();g
+                .build();
     }
 
     @Bean
