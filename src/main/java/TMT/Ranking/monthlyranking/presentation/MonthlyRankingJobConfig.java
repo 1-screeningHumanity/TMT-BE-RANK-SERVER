@@ -1,6 +1,7 @@
 package TMT.Ranking.monthlyranking.presentation;
 
 
+import TMT.Ranking.assetranking.presentation.CustomSkipListner;
 import TMT.Ranking.daliywallet.domain.DailyWallet;
 import TMT.Ranking.daliywallet.infrastructure.DailyWalletRepository;
 import TMT.Ranking.global.common.exception.CustomException;
@@ -23,6 +24,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
@@ -36,6 +38,9 @@ public class MonthlyRankingJobConfig {
     private final MonthlyRankingRepository monthlyRankingRepository;
     private final MonthlyRankingQueryDslImp monthlyRankingQueryDslImp;
     private final DailyWalletRepository dailyWalletRepository;
+
+    @Autowired
+    private CustomSkipListner customSkipListner;
 
 
 
@@ -58,7 +63,15 @@ public class MonthlyRankingJobConfig {
                 .reader(monthlyRankingReader())
                 .processor(monthlyRankingProcessor())
                 .writer(monthlyRankingWriter())
+                .faultTolerant()
+                .skip(Exception.class)
+                .skipLimit(100)
+                .listener(customSkipListner)
+                .retry(Exception.class)
+                .retryLimit(3)
+                .listener(customSkipListner)
                 .build();
+
     }
 
     @Bean //월간수익률 집계 ItemReader
