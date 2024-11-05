@@ -22,6 +22,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,9 @@ public class AssetRankingBatchJobConfig {
     private final AssetRankingRepository assetRankingRepository;
     private final AssetRankingQueryDslImp assetRankingQueryDslImp;
     private final DailyWalletRepository dailyWalletRepository;
+
+    @Autowired
+    private CustomSkipListner customSkipListner;
 
 
     @Bean //일일 자산랭킹 집계
@@ -61,7 +65,8 @@ public class AssetRankingBatchJobConfig {
                 .skip(Exception.class)
                 .skipLimit(100)
                 .retry(Exception.class)
-                .retryLimit(100)
+                .retryLimit(3)
+                .listener(customSkipListner)
                 .build();
     }
 
