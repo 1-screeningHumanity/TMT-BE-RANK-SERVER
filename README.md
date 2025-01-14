@@ -15,9 +15,9 @@
  - **Language** : Java 17
  - **Library & Framework** : Spring Boot 3.3.0
  - **Database** : MYSQL, Redis
- - **ORM** : ""
+ - **ORM** : "JPA"
  - **Deploy** : AWS EC2 / Jenkins
- - **Dependencies** : JWT, Validation, Lombok, Model Mapper, Swagger, Eureka, Kakfa, FeignClient, springBatch, JPA, springWeb, QUeryDsl, 
+ - **Dependencies** : JWT, Validation, Lombok, Model Mapper, Swagger, Eureka, Kakfa, FeignClient, springBatch, springWeb, QUeryDsl, 
 
 ## 🔧 Architecture
 - **Design Patter** : Hexagonal Architecture
